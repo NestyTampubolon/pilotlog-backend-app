@@ -2,13 +2,18 @@ package com.pilotlog.pilottrainingmanagement.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "users")
-public class Users {
+public class Users implements UserDetails {
     @Id
 //    @GeneratedValue(strategy = GenerationType.UUID)
     private String id_users;
@@ -95,6 +100,36 @@ public class Users {
 
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {
@@ -189,30 +224,6 @@ public class Users {
         this.id_company = id_company;
     }
 
-    // getters and setters
 }
 
 
-enum Rank {
-    CAPT,
-    FO,
-}
-
-
-enum Role {
-   ROLE_1,
-    //ADMIN
-    ROLE_2,
-    //TRAINEE
-    ROLE_3,
-    //INSTRUCTOR
-    ROLE_4,
-    //CPTS
-    ROLE_5,
-    //TRAINEE & INSTRUCTOR
-    ROLE_6,
-    //INSTRUCTOR & CPTS
-    ROLE_7,
-    //TRAINEE, INSTRUCTOR & CPTS
-
-}
