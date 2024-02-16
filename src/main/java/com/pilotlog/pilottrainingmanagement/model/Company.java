@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @Table(name = "company")
 public class Company {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private String id_company;
 
     @Column(name = "name", nullable = false)

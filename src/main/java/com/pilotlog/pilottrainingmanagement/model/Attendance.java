@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Table(name = "attendance")
 public class Attendance {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+  // @GeneratedValue(strategy = GenerationType.UUID)
     private String id_attendance;
 
     @Column(name = "department", nullable = false)
@@ -36,8 +36,11 @@ public class Attendance {
     @Column(name = "end_time", nullable = false)
     private Time end_time;
 
-    @Column(name = "signature_instructor", nullable = false)
+    @Column(name = "signature_instructor")
     private String signature_instructor;
+
+    @Column(name = "keyAttendance")
+    private String keyAttendance;
 
     @Column(name = "status")
     private Status status;
@@ -70,9 +73,3 @@ public class Attendance {
     private TrainingClass id_trainingclass;
 }
 
-enum Status {
-    Pending,
-    Confirmation,
-    Done
-
-}

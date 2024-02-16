@@ -2,6 +2,7 @@ package com.pilotlog.pilottrainingmanagement.service.impl;
 
 import com.pilotlog.pilottrainingmanagement.dto.JwtAuthenticationResponse;
 import com.pilotlog.pilottrainingmanagement.dto.RefreshTokenRequest;
+import com.pilotlog.pilottrainingmanagement.model.Company;
 import com.pilotlog.pilottrainingmanagement.model.Users;
 import com.pilotlog.pilottrainingmanagement.repository.UsersRepository;
 import com.pilotlog.pilottrainingmanagement.service.AuthenticationService;
@@ -63,13 +64,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public JwtAuthenticationResponse signIn(Users signinRequest){
-        System.out.println(signinRequest.getEmail());
-        System.out.println( signinRequest.getPassword());
-        System.out.println("user 2");
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(signinRequest.getEmail(), signinRequest.getPassword());
-        System.out.println("user");
-
 
         try {
             authenticationManager.authenticate(authentication);
@@ -84,9 +80,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         var user = usersRepository.findByEmail(signinRequest.getEmail()).orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-
-        System.out.println("user 3");
-        System.out.println(user);
 
         var jwt = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
@@ -119,11 +112,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     }
 
-    public String getUserInfo() {
+
+    public static String getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Users user = (Users) authentication.getPrincipal();
         String userId = user.getId_users();
         return userId;
+    }
+
+
+    public static Company getCompanyInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof Users) {
+            Users user = (Users) authentication.getPrincipal();
+            if (user.getId_company() != null) {
+                return user.getId_company();
+            }
+        }
+        return null;
     }
 
 }

@@ -20,8 +20,6 @@ public class PilottrainingmanagementApplication implements CommandLineRunner {
 	private UsersRepository usersRepository;
 
 	public static void main(String[] args) {
-		System.out.println("chek");
-
 		SpringApplication.run(PilottrainingmanagementApplication.class, args);
 	}
 

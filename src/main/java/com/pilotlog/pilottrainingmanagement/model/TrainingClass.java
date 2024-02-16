@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Table(name = "trainingClass")
 public class TrainingClass {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private String id_trainingclass;
 
     @Column(name = "name", nullable = false)
@@ -23,7 +23,7 @@ public class TrainingClass {
     private String recurrent;
 
     @Column(name = "description")
-    private Long description;
+    private String description;
 
     @Column(name = "is_delete", nullable = false)
     private byte is_delete;
@@ -39,6 +39,11 @@ public class TrainingClass {
 
     @Column(name = "updated_by", nullable = false)
     private String updated_by;
+
+    @ManyToOne
+    @JoinColumn(name="id_company")
+    private Company id_company;
+
 }
 
 

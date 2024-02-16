@@ -1,6 +1,7 @@
 package com.pilotlog.pilottrainingmanagement.service.impl;
 
 import com.pilotlog.pilottrainingmanagement.exception.ResourceNotFoundException;
+import com.pilotlog.pilottrainingmanagement.model.Company;
 import com.pilotlog.pilottrainingmanagement.model.Users;
 import com.pilotlog.pilottrainingmanagement.repository.UsersRepository;
 import com.pilotlog.pilottrainingmanagement.service.AuthenticationService;
@@ -60,7 +61,7 @@ public class UsersServiceImpl implements UsersService {
         existingUsers.setRole(users.getRole());
         existingUsers.setIs_active(users.getIs_active());
         existingUsers.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
-        existingUsers.setUpdated_by(getUserInfo());
+        existingUsers.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
         usersRepository.save(existingUsers);
 
         return existingUsers;
@@ -83,7 +84,7 @@ public class UsersServiceImpl implements UsersService {
 
         existingUsers.setIs_active((byte) 0);
         existingUsers.setUpdated_at(Timestamp.valueOf(timestamp));
-        existingUsers.setUpdated_by(getUserInfo());
+        existingUsers.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
         usersRepository.save(existingUsers);
         return existingUsers;
     }
@@ -99,10 +100,6 @@ public class UsersServiceImpl implements UsersService {
         };
     }
 
-    public String getUserInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Users user = (Users) authentication.getPrincipal();
-        String userId = user.getId_users();
-        return userId;
-    }
+
+
 }

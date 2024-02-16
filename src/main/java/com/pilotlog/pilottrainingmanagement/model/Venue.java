@@ -12,10 +12,11 @@ public class Venue {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id_venue;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "is_delete", nullable = false)
     private byte is_delete;
-
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;
