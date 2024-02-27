@@ -7,11 +7,18 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name = "trainingClass")
+@Table(name = "trainingclass")
 public class TrainingClass {
     @Id
 //    @GeneratedValue(strategy = GenerationType.UUID)
     private String id_trainingclass;
+
+    public TrainingClass() {
+    }
+    public TrainingClass(String id) {
+        this.id_trainingclass = id;
+    }
+
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -26,7 +33,7 @@ public class TrainingClass {
     private String description;
 
     @Column(name = "is_delete", nullable = false)
-    private byte is_delete;
+    private byte isDelete;
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;

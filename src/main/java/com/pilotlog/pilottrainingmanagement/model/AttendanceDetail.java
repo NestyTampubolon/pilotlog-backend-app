@@ -27,7 +27,7 @@ public class AttendanceDetail {
 
     @ManyToOne
     @JoinColumn(name="id_attendance")
-    private Users id_attendance;
+    private Attendance id_attendance;
 
     @ManyToOne
     @JoinColumn(name="id_trainee")

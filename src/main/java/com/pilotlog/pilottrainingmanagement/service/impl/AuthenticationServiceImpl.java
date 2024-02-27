@@ -120,6 +120,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userId;
     }
 
+    public static Users getUserAdminInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Users user = (Users) authentication.getPrincipal();
+        return user;
+    }
+
 
     public static Company getCompanyInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

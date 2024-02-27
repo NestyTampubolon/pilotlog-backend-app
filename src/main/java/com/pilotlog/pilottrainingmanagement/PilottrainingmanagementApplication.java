@@ -25,7 +25,7 @@ public class PilottrainingmanagementApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Users adminAccount = usersRepository.findByRole(Role.ROLE_1);
+		Users adminAccount = usersRepository.findByRole(Role.ADMIN);
 		if(null ==  adminAccount){
 			Users users = new Users();
 
@@ -38,7 +38,7 @@ public class PilottrainingmanagementApplication implements CommandLineRunner {
 			users.setHub("CGK");
 			users.setLicense_no(" ");
 			users.setPhoto_profile("");
-			users.setRole(Role.ROLE_1);
+			users.setRole(Role.ADMIN);
 			users.setIs_active((byte) 1);
 			users.setCreated_at(Timestamp.valueOf("2024-02-05 14:03:44.067"));
 			users.setUpdated_at(Timestamp.valueOf("2024-02-05 14:03:44.067"));

@@ -32,7 +32,7 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     public List<Venue> getAllVenue() {
-        return venueRepository.findAll();
+        return venueRepository.findAllByCompanyIdAndIsDeleteIsZero(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
     @Override

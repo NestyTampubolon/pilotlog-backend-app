@@ -1,19 +1,20 @@
 package com.pilotlog.pilottrainingmanagement.model;
 
 public enum Role {
-    ROLE_1,
+    ADMIN,
     //ADMIN
-    ROLE_2,
+    TRAINEE,
     //TRAINEE
-    ROLE_3,
+    INSTRUCTOR,
     //INSTRUCTOR
-    ROLE_4,
+    CPTS,
     //CPTS
-    ROLE_5,
+    TRAINEE_INSTRUCTOR,
     //TRAINEE & INSTRUCTOR
-    ROLE_6,
+    TRAINEE_CPTS,
+    //TRAINEE & CPTS
+    INSTRUCTOR_CPTS,
     //INSTRUCTOR & CPTS
-    ROLE_7,
+    TRAINEE_INSTRUCTOR_CPTS,
     //TRAINEE, INSTRUCTOR & CPTS
-
 }

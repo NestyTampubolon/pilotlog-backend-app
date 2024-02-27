@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class AttendanceController {
 
     // build create Users
     @PostMapping("admin/addAttendance")
-    public ResponseEntity<Attendance> addAttendance(@RequestBody Attendance attendance){
+    public ResponseEntity<Attendance> addAttendance(@RequestBody Attendance attendance) throws ParseException {
         return new ResponseEntity<>(attendanceService.addAttendance(attendance), HttpStatus.CREATED);
     }
 
@@ -36,7 +37,7 @@ public class AttendanceController {
 
     @PutMapping("admin/attendance/update/{id}")
     public ResponseEntity<Attendance> updateAttendance(@PathVariable("id") String id,
-                                                        @RequestBody Attendance attendance){
+                                                        @RequestBody Attendance attendance) throws ParseException {
         return new ResponseEntity<Attendance>(attendanceService.updateAttendance(attendance,id), HttpStatus.OK);
     }
 

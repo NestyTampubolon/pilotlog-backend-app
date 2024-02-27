@@ -35,8 +35,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public List<Department> getAllDepartment() {
-        return departmentRepository.findAll();
+        return departmentRepository.findAllByCompanyIdAndIsDeleteIsZero(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
+
+//    @Override
+//    public List<Department> getAllDepartment() {
+//        return departmentRepository.findAll();
+//    }
 
     @Override
     public Department getDepartmentById(String id) {

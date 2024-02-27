@@ -10,7 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -46,6 +52,13 @@ public class TrainingController {
         return new ResponseEntity<TrainingClass>(trainingClassService.deleteTrainingClass(trainingClass,id), HttpStatus.OK);
     }
 
+//    @PostMapping("admin/validto")
+//    public ResponseEntity<String> getValidTo(@RequestBody Map<String, String> request) throws ParseException {
+//        String shortName = request.get("shortName");
+//        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(request.get("date"));
+//
+//        return ResponseEntity.ok(trainingClassService.getValueDateTrainingClass(shortName, date));
+//    }
 
 
 }

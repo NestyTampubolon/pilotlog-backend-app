@@ -2,6 +2,7 @@ package com.pilotlog.pilottrainingmanagement.service.impl;
 
 import com.pilotlog.pilottrainingmanagement.exception.ResourceNotFoundException;
 import com.pilotlog.pilottrainingmanagement.model.Company;
+import com.pilotlog.pilottrainingmanagement.model.StatusUsers;
 import com.pilotlog.pilottrainingmanagement.model.Users;
 import com.pilotlog.pilottrainingmanagement.repository.UsersRepository;
 import com.pilotlog.pilottrainingmanagement.service.AuthenticationService;
@@ -29,12 +30,39 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public Users addUser(Users users){
-        return usersRepository.save(users);
+
+        Users usersc = new Users();
+        usersc.setId_users(AuthenticationServiceImpl.getCompanyInfo().getId_company() + users.getId_no());
+        usersc.setId_no(users.getId_no());
+        usersc.setName(users.getName());
+        usersc.setEmail(users.getEmail());
+        usersc.setPassword(new BCryptPasswordEncoder().encode(users.getId_no()));
+        usersc.setRank(users.getRank());
+        usersc.setHub(users.getHub());
+        usersc.setLicense_no(users.getLicense_no());
+        usersc.setPhoto_profile(users.getPhoto_profile());
+        usersc.setRole(users.getRole());
+        usersc.setIs_active((byte) 1);
+        if(!"ADMIN".equals(users.getRole())) {
+            users.setLicense_no(users.getLicense_no());
+            users.setStatus("NOT VALID");
+        }
+        usersc.setId_company(AuthenticationServiceImpl.getCompanyInfo());
+        usersc.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
+        usersc.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
+        usersc.setCreated_by(AuthenticationServiceImpl.getUserInfo());
+        usersc.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
+        return usersRepository.save(usersc);
     }
 
     @Override
     public List<Users> getAllUsers(){
         return usersRepository.findAll();
+    }
+
+    @Override
+    public List<Users> getAllInstructor() {
+        return usersRepository.findInstructorUsers();
     }
 
     @Override
@@ -53,13 +81,11 @@ public class UsersServiceImpl implements UsersService {
         existingUsers.setId_no(users.getId_no());
         existingUsers.setName(users.getName());
         existingUsers.setEmail(users.getEmail());
-        existingUsers.setPassword(new BCryptPasswordEncoder().encode(users.getPassword()));
         existingUsers.setRank(users.getRank());
         existingUsers.setHub(users.getHub());
         existingUsers.setLicense_no(users.getLicense_no());
         existingUsers.setPhoto_profile(users.getPhoto_profile());
         existingUsers.setRole(users.getRole());
-        existingUsers.setIs_active(users.getIs_active());
         existingUsers.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
         existingUsers.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
         usersRepository.save(existingUsers);
@@ -99,7 +125,4 @@ public class UsersServiceImpl implements UsersService {
             }
         };
     }
-
-
-
 }

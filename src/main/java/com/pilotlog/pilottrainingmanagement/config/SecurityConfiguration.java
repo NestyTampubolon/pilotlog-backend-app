@@ -27,17 +27,16 @@ public class SecurityConfiguration {
 
     private final UsersService usersService;
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**")
                         .permitAll()
-                        .requestMatchers("/api/v1/admin").hasAnyAuthority(Role.ROLE_1.name())
-                        .requestMatchers("/api/v1/trainee").hasAnyAuthority(Role.ROLE_2.name())
-                        .requestMatchers("/api/v1/instructor").hasAnyAuthority(Role.ROLE_3.name())
-                        .requestMatchers("/api/v1/cpts").hasAnyAuthority(Role.ROLE_3.name())
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/api/v1/admin").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers("/api/v1/trainee").hasAnyAuthority(Role.TRAINEE.name())
+                        .requestMatchers("/api/v1/instructor").hasAnyAuthority(Role.INSTRUCTOR.name())
+                        .requestMatchers("/api/v1/cpts").hasAnyAuthority(Role.CPTS.name())
                         .anyRequest().authenticated())
 
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

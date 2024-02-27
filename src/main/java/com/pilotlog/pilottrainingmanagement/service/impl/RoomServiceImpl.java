@@ -33,7 +33,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<Room> getAllRoom() {
-        return roomRepository.findAll();
+        return roomRepository.findAllByCompanyIdAndIsDeleteIsZero(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
     @Override

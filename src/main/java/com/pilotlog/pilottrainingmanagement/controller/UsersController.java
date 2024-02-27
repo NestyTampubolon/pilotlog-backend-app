@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/v1/")
 @RequiredArgsConstructor
 public class UsersController {
-    private UsersService usersService;
+    private final UsersService usersService;
 
     // build create Users
     @PostMapping("admin/addUsers")
@@ -26,6 +26,11 @@ public class UsersController {
     @GetMapping("admin/users")
     public List<Users> getAllUsers(){
         return usersService.getAllUsers();
+    }
+
+    @GetMapping("admin/instructor")
+    public List<Users> getAllInstructor(){
+        return usersService.getAllInstructor();
     }
 
     //build get employee by id

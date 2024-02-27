@@ -1,5 +1,6 @@
 package com.pilotlog.pilottrainingmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,15 +26,19 @@ public class Attendance {
     private String room;
 
     @Column(name = "date", nullable = false)
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date date;
 
     @Column(name = "valid_to", nullable = false)
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date valid_to;
 
     @Column(name = "start_time", nullable = false)
+    @JsonFormat(pattern="HH:mm")
     private Time start_time;
 
     @Column(name = "end_time", nullable = false)
+    @JsonFormat(pattern="HH:mm")
     private Time end_time;
 
     @Column(name = "signature_instructor")
@@ -43,10 +48,11 @@ public class Attendance {
     private String keyAttendance;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column(name = "is_delete", nullable = false)
-    private byte is_delete;
+    private byte isDelete;
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;

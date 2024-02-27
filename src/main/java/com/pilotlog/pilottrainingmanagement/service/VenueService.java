@@ -5,7 +5,6 @@ import com.pilotlog.pilottrainingmanagement.model.Venue;
 import java.util.List;
 
 public interface VenueService {
-
     Venue addVenue(Venue venue);
     List<Venue> getAllVenue();
     Venue getVenueById(String id);
