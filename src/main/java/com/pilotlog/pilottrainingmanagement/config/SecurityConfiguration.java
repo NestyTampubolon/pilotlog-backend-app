@@ -3,6 +3,7 @@ package com.pilotlog.pilottrainingmanagement.config;
 import com.pilotlog.pilottrainingmanagement.model.Role;
 import com.pilotlog.pilottrainingmanagement.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,8 +35,8 @@ public class SecurityConfiguration {
                         .permitAll()
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/api/v1/admin").hasAnyAuthority(Role.ADMIN.name())
-                        .requestMatchers("/api/v1/trainee").hasAnyAuthority(Role.TRAINEE.name())
-                        .requestMatchers("/api/v1/instructor").hasAnyAuthority(Role.INSTRUCTOR.name())
+                        .requestMatchers("/api/v1/trainee").hasAnyAuthority(Role.TRAINEE.name(), Role.TRAINEE_CPTS.name(), Role.TRAINEE_INSTRUCTOR.name(), Role.ADMIN.name())
+                        .requestMatchers("/api/v1/instructor").hasAnyAuthority(Role.INSTRUCTOR.name(), Role.TRAINEE_INSTRUCTOR.name())
                         .requestMatchers("/api/v1/cpts").hasAnyAuthority(Role.CPTS.name())
                         .anyRequest().authenticated())
 

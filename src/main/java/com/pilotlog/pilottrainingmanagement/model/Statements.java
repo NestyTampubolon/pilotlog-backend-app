@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Table(name = "statements")
 public class Statements {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id_statements;
 
     @Column(name = "content", nullable = false)
@@ -22,8 +22,9 @@ public class Statements {
     @Column(name = "is_delete", nullable = false)
     private byte is_delete;
 
-    @Column(name = "audience", nullable = false)
-    private byte audience;
+    @Column(name = "statementType", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StatementType statementType;
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;

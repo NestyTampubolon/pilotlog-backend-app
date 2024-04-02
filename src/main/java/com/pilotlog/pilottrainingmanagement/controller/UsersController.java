@@ -67,4 +67,9 @@ public class UsersController {
 //        String userId = user.getId_users();
 //        return ResponseEntity.ok(userId);
 //    }
+
+    @PutMapping("public/changepassword/{id}")
+    public ResponseEntity<Users> changePassword(@PathVariable("id") String id, @RequestBody Users users){
+        return new ResponseEntity<Users>(usersService.changePassword(users, id), HttpStatus.OK);
+    }
 }

@@ -10,12 +10,11 @@ import java.sql.Timestamp;
 @Table(name = "certificate")
 public class Certificate {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id_certificate;
 
     @Column(name = "signature", nullable = false)
     private String signature;
-
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;

@@ -33,13 +33,13 @@ public class RoomController {
     }
 
     @PutMapping("room/update/{id}")
-    public ResponseEntity<Room> updateTraining(@PathVariable("id") String id,
+    public ResponseEntity<Room> updateRoom(@PathVariable("id") String id,
                                                 @RequestBody Room room){
         return new ResponseEntity<Room>(roomService.updateRoom(room,id), HttpStatus.OK);
     }
 
     @PutMapping("room/delete/{id}")
-    public ResponseEntity<Room> deleteVenue(@PathVariable("id") String id,
+    public ResponseEntity<Room> deleteRoom(@PathVariable("id") String id,
                                              @RequestBody Room venue){
         return new ResponseEntity<Room>(roomService.deleteRoom(venue,id), HttpStatus.OK);
     }

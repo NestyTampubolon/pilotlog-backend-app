@@ -1,6 +1,7 @@
 package com.pilotlog.pilottrainingmanagement.controller;
 
 import com.pilotlog.pilottrainingmanagement.model.Attendance;
+import com.pilotlog.pilottrainingmanagement.model.AttendanceDetail;
 import com.pilotlog.pilottrainingmanagement.model.TrainingClass;
 import com.pilotlog.pilottrainingmanagement.service.AttendanceService;
 import com.pilotlog.pilottrainingmanagement.service.TrainingClassService;
@@ -30,7 +31,7 @@ public class AttendanceController {
         return attendanceService.getAllAttendance();
     }
 
-    @GetMapping("admin/attendance/{id}")
+    @GetMapping("public/attendance/{id}")
     public ResponseEntity<Attendance> getAttendanceById(@PathVariable("id") String idattendance){
         return new ResponseEntity<Attendance>(attendanceService.getAttendanceById(idattendance), HttpStatus.OK);
     }
@@ -53,11 +54,30 @@ public class AttendanceController {
         return new ResponseEntity<Attendance>(attendanceService.confirmationAttendancebyAdmin(attendance,id), HttpStatus.OK);
     }
 
-    @PutMapping("admin/attendance/confirmationInstructor/{id}")
+    @PutMapping("instructor/attendance/confirmationInstructor/{id}")
     public ResponseEntity<Attendance> confirmationAttendancebyInstructor(@PathVariable("id") String id,
                                                        @RequestBody Attendance attendance){
         return new ResponseEntity<Attendance>(attendanceService.confirmationAttendancebyInstructor(attendance,id), HttpStatus.OK);
     }
+
+    @GetMapping("instructor/attendancependingbyinstructor")
+    public List<Attendance> getattendancependingbyinstructor(){
+        return attendanceService.getAttendancePendingByIdInstructor();
+    }
+
+    @GetMapping("instructor/attendanceconfirmationdonebyinstructor")
+    public List<Attendance> getattendanceconfirmationdonebyinstructor(){
+        return attendanceService.getAttendanceConfirmationDoneByIdInstructor();
+    }
+
+    @PutMapping("instructor/attendancesignature/{id}")
+    public ResponseEntity<Attendance> addSignatureInstructor(@PathVariable("id") String id,
+                                                         @RequestBody byte[] signatureData){
+        return new ResponseEntity<Attendance>(attendanceService.addSignatureInstructor(signatureData,id), HttpStatus.OK);
+    }
+
+
+
 
 
 }

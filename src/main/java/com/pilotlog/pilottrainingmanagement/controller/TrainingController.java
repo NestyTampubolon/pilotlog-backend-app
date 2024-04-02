@@ -52,6 +52,12 @@ public class TrainingController {
         return new ResponseEntity<TrainingClass>(trainingClassService.deleteTrainingClass(trainingClass,id), HttpStatus.OK);
     }
 
+
+    @GetMapping("trainee/getAllTraining")
+    public List<TrainingClass> getAllTrainingClassByIdCompany(){
+        return trainingClassService.getAllTrainingClassByIdCompany();
+    }
+
 //    @PostMapping("admin/validto")
 //    public ResponseEntity<String> getValidTo(@RequestBody Map<String, String> request) throws ParseException {
 //        String shortName = request.get("shortName");

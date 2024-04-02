@@ -5,6 +5,7 @@ import com.pilotlog.pilottrainingmanagement.dto.RefreshTokenRequest;
 import com.pilotlog.pilottrainingmanagement.model.Users;
 import com.pilotlog.pilottrainingmanagement.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,5 +33,13 @@ public class AuthenticationController {
     public ResponseEntity<JwtAuthenticationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest){
         return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
     }
+
+    @GetMapping("/users/profil")
+    public ResponseEntity<Users> getUserProfil(){
+        System.out.println("sdada");
+        Users userProfile = authenticationService.getUserProfile();
+        return ResponseEntity.ok(userProfile);
+    }
+
 
 }

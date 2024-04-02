@@ -15,5 +15,7 @@ public interface UsersService {
     void deleteUsers(String id);
     Users activationUsers(Users users, String id);
     UserDetailsService userDetailsService();
+    Users changePassword(Users users, String id);
+
 
 }

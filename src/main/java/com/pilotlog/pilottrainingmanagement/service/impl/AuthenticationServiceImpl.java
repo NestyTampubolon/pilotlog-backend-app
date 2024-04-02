@@ -68,6 +68,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 new UsernamePasswordAuthenticationToken(signinRequest.getEmail(), signinRequest.getPassword());
 
         try {
+            System.out.println(signinRequest.getEmail());
+            System.out.println(signinRequest.getPassword());
             authenticationManager.authenticate(authentication);
         } catch (BadCredentialsException e) {
             System.out.println("Invalid username or password");
@@ -88,8 +90,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         jwtAuthenticationResponse.setToken(jwt);
         jwtAuthenticationResponse.setRefreshToken(refreshToken);
+        jwtAuthenticationResponse.setUsers(user);
         return jwtAuthenticationResponse;
-
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -120,7 +122,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userId;
     }
 
-    public static Users getUserAdminInfo() {
+    public static Users getUserProfileInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Users user = (Users) authentication.getPrincipal();
+        return user;
+    }
+
+    public Users getUserProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Users user = (Users) authentication.getPrincipal();
         return user;

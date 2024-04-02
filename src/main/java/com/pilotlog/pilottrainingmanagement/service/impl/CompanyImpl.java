@@ -24,7 +24,7 @@ public class CompanyImpl implements CompanyService {
         companyC.setName(company.getName());
         companyC.setEmail(company.getEmail());
         companyC.setLogo(company.getLogo());
-        companyC.setAddress(company.getAddress());
+        companyC.setContact(company.getContact());
         companyC.setIs_delete((byte) 0);
         companyC.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
         companyC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
@@ -55,7 +55,7 @@ public class CompanyImpl implements CompanyService {
         existingCompany.setName(company.getName());
         existingCompany.setEmail(company.getEmail());
         existingCompany.setLogo(company.getLogo());
-        existingCompany.setAddress(company.getAddress());
+        existingCompany.setContact(company.getContact());
         existingCompany.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
         existingCompany.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
         companyRepository.save(existingCompany);

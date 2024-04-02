@@ -91,7 +91,10 @@ public class TrainingClassImpl implements TrainingClassService {
     public String getValueDateTrainingClass(String idTrainingClass, Date date) {
         String companyId = AuthenticationServiceImpl.getCompanyInfo().getId_company();
         List<TrainingClass> existingTraining = trainingClassRepository.findByIdTrainingClass(idTrainingClass, companyId);
-
+        System.out.println("disini");
+        System.out.println(idTrainingClass);
+        System.out.println(companyId);
+        System.out.println(existingTraining);
         if (!existingTraining.isEmpty()) {
             TrainingClass firstTraining = existingTraining.get(0);
 
@@ -99,12 +102,15 @@ public class TrainingClassImpl implements TrainingClassService {
             String recurrent = trainingClass.getRecurrent();
             Date validTo;
 
+            System.out.println("valid to");
+            System.out.println(recurrent);
             if (Objects.equals(recurrent, "Initial")) {
                 return null;
             } else if (Objects.equals(recurrent, "6 Month") ||
                     Objects.equals(recurrent, "12 Month") ||
                     Objects.equals(recurrent, "24 Month") ||
                     Objects.equals(recurrent, "36 Month")) {
+                System.out.println(recurrent);
                 int monthsToAdd;
                 switch (recurrent) {
                     case "6 Month":
@@ -160,5 +166,10 @@ public class TrainingClassImpl implements TrainingClassService {
         return null;
     }
 
-
+    @Override
+    public List<TrainingClass> getAllTrainingClassByIdCompany() {
+        String companyId = AuthenticationServiceImpl.getCompanyInfo().getId_company();
+        List<TrainingClass> existingTraining = trainingClassRepository.findTrainingClassByIdCompany(companyId);
+        return existingTraining;
+    }
 }

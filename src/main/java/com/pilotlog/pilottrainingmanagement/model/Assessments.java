@@ -13,11 +13,8 @@ public class Assessments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_assessments;
 
-    @Column(name = "grade", nullable = false)
-    private int grade;
-
-    @Column(name = "fromAudience", nullable = false)
-    private byte fromAudience;
+    @Column(name = "rating", nullable = false)
+    private int rating;
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;
@@ -25,9 +22,15 @@ public class Assessments {
     @Column(name = "updated_at", nullable = false)
     private Timestamp updated_at;
 
+    @Column(name = "created_by", nullable = false)
+    private String created_by;
+
+    @Column(name = "updated_by", nullable = false)
+    private String updated_by;
+
     @ManyToOne
     @JoinColumn(name="id_attendancedetail")
-    private AttendanceDetail id_attendancedetail;
+    private AttendanceDetail idAttendanceDetail;
 
     @ManyToOne
     @JoinColumn(name="id_statements")

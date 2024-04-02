@@ -3,10 +3,8 @@ package com.pilotlog.pilottrainingmanagement.service.impl;
 import com.pilotlog.pilottrainingmanagement.exception.ResourceNotFoundException;
 import com.pilotlog.pilottrainingmanagement.model.Attendance;
 import com.pilotlog.pilottrainingmanagement.model.Status;
-import com.pilotlog.pilottrainingmanagement.model.TrainingClass;
 import com.pilotlog.pilottrainingmanagement.repository.AttendanceRepository;
 import com.pilotlog.pilottrainingmanagement.service.AttendanceService;
-import com.pilotlog.pilottrainingmanagement.service.JWTService;
 import com.pilotlog.pilottrainingmanagement.service.TrainingClassService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
 import java.text.SimpleDateFormat;
-import java.util.*;
+
 @Service
 @RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService {
@@ -41,6 +39,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = trainingClassService.getValueDateTrainingClass(attendance.getId_trainingclass().getId_trainingclass(), attendance.getDate());
+        System.out.println(dateStr);
         if(dateStr != null){
             SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
 
@@ -62,7 +61,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendanceC.setStart_time(startTime);
             attendanceC.setEnd_time(endTime);
             attendanceC.setId_instructor(attendance.getId_instructor());
-            attendanceC.setId_admin(AuthenticationServiceImpl.getUserAdminInfo());
+            attendanceC.setId_admin(AuthenticationServiceImpl.getUserProfileInfo());
             attendanceC.setStatus(Status.valueOf("Pending"));
             attendanceC.setKeyAttendance(getSaltString());
             attendanceC.setIsDelete((byte) 0);
@@ -71,8 +70,11 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendanceC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
             attendanceC.setCreated_by(AuthenticationServiceImpl.getUserInfo());
             attendanceC.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
+            System.out.println("sdada");
+            System.out.println(attendanceC);
             return attendanceRepository.save(attendanceC);
         }
+        System.out.println("gagal");
         return null;
     }
 
@@ -165,5 +167,27 @@ public class AttendanceServiceImpl implements AttendanceService {
         return existingAttandance;
     }
 
+    @Override
+    public List<Attendance> getAttendancePendingByIdInstructor() {
+        return attendanceRepository.getAttendancePendingByIdInstructor(AuthenticationServiceImpl.getUserInfo());
+    }
 
+    @Override
+    public List<Attendance> getAttendanceConfirmationDoneByIdInstructor() {
+        return attendanceRepository.getAttendanceConfirmationDoneByIdInstructor(AuthenticationServiceImpl.getUserInfo());
+    }
+
+    @Override
+    public Attendance addSignatureInstructor(byte[] signatureData, String id) {
+        Attendance existingAttendance = attendanceRepository.findById(String.valueOf(id)).orElseThrow(
+                () -> new ResourceNotFoundException("Attendance", "Id", id)
+        );
+
+        existingAttendance.setStatus(Status.Confirmation);
+        existingAttendance.setSignature_instructor(signatureData);
+        existingAttendance.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
+        attendanceRepository.save(existingAttendance);
+
+        return existingAttendance;
+    }
 }

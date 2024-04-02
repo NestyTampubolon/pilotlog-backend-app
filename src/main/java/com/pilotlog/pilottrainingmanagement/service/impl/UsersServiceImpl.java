@@ -78,20 +78,38 @@ public class UsersServiceImpl implements UsersService {
                 () -> new ResourceNotFoundException("Users", "Id", id)
         );
 
-        existingUsers.setId_no(users.getId_no());
-        existingUsers.setName(users.getName());
-        existingUsers.setEmail(users.getEmail());
-        existingUsers.setRank(users.getRank());
-        existingUsers.setHub(users.getHub());
-        existingUsers.setLicense_no(users.getLicense_no());
-        existingUsers.setPhoto_profile(users.getPhoto_profile());
-        existingUsers.setRole(users.getRole());
+        if(users.getId_no() != null){
+            existingUsers.setId_no(users.getId_no());
+        }
+        if(users.getName() != null){
+            existingUsers.setName(users.getName());
+        }
+        if(users.getEmail() != null){
+            existingUsers.setEmail(users.getEmail());
+        }
+        if(users.getRank() != null){
+            existingUsers.setRank(users.getRank());
+        }
+        if(users.getHub() != null){
+            existingUsers.setHub(users.getHub());
+        }
+        if(users.getLicense_no() != null){
+            existingUsers.setLicense_no(users.getLicense_no());
+        }
+        if(users.getPhoto_profile() != null){
+            existingUsers.setPhoto_profile(users.getPhoto_profile());
+        }
+        if(users.getRole() != null){
+            existingUsers.setRole(users.getRole());
+        }
+
         existingUsers.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
         existingUsers.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
         usersRepository.save(existingUsers);
 
         return existingUsers;
     }
+
 
     @Override
     public void deleteUsers(String id) {
@@ -125,4 +143,18 @@ public class UsersServiceImpl implements UsersService {
             }
         };
     }
+
+    @Override
+    public Users changePassword(Users users, String id) {
+            Users existingUsers = usersRepository.findById(id).orElseThrow(
+                    () -> new ResourceNotFoundException("Users", "Id", id)
+            );
+
+            existingUsers.setPassword(new BCryptPasswordEncoder().encode(users.getPassword()));
+            existingUsers.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
+            existingUsers.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
+            usersRepository.save(existingUsers);
+            return existingUsers;
+    }
+
 }

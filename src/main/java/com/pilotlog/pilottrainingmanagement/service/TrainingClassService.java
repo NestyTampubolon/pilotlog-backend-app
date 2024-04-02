@@ -13,5 +13,6 @@ public interface TrainingClassService {
     TrainingClass updateTrainingClass(TrainingClass trainingClass, String id);
     TrainingClass deleteTrainingClass(TrainingClass trainingClass,String id);
     String getValueDateTrainingClass(String shortName, Date date);
+    List<TrainingClass> getAllTrainingClassByIdCompany();
 
 }

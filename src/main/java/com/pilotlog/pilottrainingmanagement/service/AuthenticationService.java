@@ -7,7 +7,8 @@ import com.pilotlog.pilottrainingmanagement.model.Users;
 public interface AuthenticationService {
     Users signUp(Users users);
     JwtAuthenticationResponse signIn(Users users);
-
     JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
+
+    Users getUserProfile();
 
 }

@@ -23,8 +23,8 @@ public class Company {
     @Column(name = "logo")
     private String logo;
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "contact")
+    private String contact;
 
     @Column(name = "is_delete", nullable = false)
     private byte is_delete;

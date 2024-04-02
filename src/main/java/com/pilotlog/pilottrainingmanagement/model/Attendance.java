@@ -26,11 +26,9 @@ public class Attendance {
     private String room;
 
     @Column(name = "date", nullable = false)
-    @JsonFormat(pattern="dd-MM-yyyy")
     private Date date;
 
     @Column(name = "valid_to", nullable = false)
-    @JsonFormat(pattern="dd-MM-yyyy")
     private Date valid_to;
 
     @Column(name = "start_time", nullable = false)
@@ -42,7 +40,7 @@ public class Attendance {
     private Time end_time;
 
     @Column(name = "signature_instructor")
-    private String signature_instructor;
+    private byte[] signature_instructor;
 
     @Column(name = "keyAttendance")
     private String keyAttendance;
