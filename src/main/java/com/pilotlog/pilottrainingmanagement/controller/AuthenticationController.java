@@ -2,6 +2,7 @@ package com.pilotlog.pilottrainingmanagement.controller;
 
 import com.pilotlog.pilottrainingmanagement.dto.JwtAuthenticationResponse;
 import com.pilotlog.pilottrainingmanagement.dto.RefreshTokenRequest;
+import com.pilotlog.pilottrainingmanagement.dto.SignUpRequest;
 import com.pilotlog.pilottrainingmanagement.model.Users;
 import com.pilotlog.pilottrainingmanagement.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class AuthenticationController {
     private AuthenticationManager manager;
 
     @PostMapping("/signup")
-    public ResponseEntity<Users> signup(@RequestBody Users users){
+    public ResponseEntity<?> signup(@RequestBody SignUpRequest users){
         return ResponseEntity.ok(authenticationService.signUp(users));
     }
 
@@ -36,7 +37,6 @@ public class AuthenticationController {
 
     @GetMapping("/users/profil")
     public ResponseEntity<Users> getUserProfil(){
-        System.out.println("sdada");
         Users userProfile = authenticationService.getUserProfile();
         return ResponseEntity.ok(userProfile);
     }

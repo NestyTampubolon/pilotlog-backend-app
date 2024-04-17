@@ -19,6 +19,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
 import java.text.SimpleDateFormat;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -70,18 +73,36 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendanceC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
             attendanceC.setCreated_by(AuthenticationServiceImpl.getUserInfo());
             attendanceC.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
-            System.out.println("sdada");
-            System.out.println(attendanceC);
             return attendanceRepository.save(attendanceC);
         }
-        System.out.println("gagal");
         return null;
     }
 
     @Override
     public List<Attendance> getAllAttendance() {
-        return attendanceRepository.findAllByIsDelete((byte) 0);
+        return attendanceRepository.findAllByIdCompany(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
+
+    @Override
+    public List<Attendance> getAllAttendanceByDate(Attendance attendance) throws ParseException {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+            // Mengonversi objek Date menjadi string
+            String dateString = sdf.format(attendance.getDate());
+
+            // Parsing tanggal dari string
+            java.util.Date parsedDate = sdf.parse(dateString);
+            Date date = new Date(parsedDate.getTime());
+
+            return attendanceRepository.findAllByIdCompanyAndDate(AuthenticationServiceImpl.getCompanyInfo().getId_company(), date);
+        } catch (ParseException e) {
+            // Handle jika terjadi kesalahan dalam parsing tanggal
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     @Override
     public Attendance getAttendanceById(String id) {
@@ -185,6 +206,24 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         existingAttendance.setStatus(Status.Confirmation);
         existingAttendance.setSignature_instructor(signatureData);
+        existingAttendance.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
+        attendanceRepository.save(existingAttendance);
+
+        return existingAttendance;
+    }
+
+    @Override
+    public List<Attendance> getAttendanceByIdInstructorAndIdTrainingClass( String id) {
+        return attendanceRepository.getAttendanceByIdInstructorAndIdTrainingClass(AuthenticationServiceImpl.getUserInfo(), id);
+    }
+
+    @Override
+    public Attendance updateDoneAttendance(String id) {
+        Attendance existingAttendance = attendanceRepository.findById(String.valueOf(id)).orElseThrow(
+                () -> new ResourceNotFoundException("Attendance", "Id", id)
+        );
+
+        existingAttendance.setStatus(Status.Done);
         existingAttendance.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
         attendanceRepository.save(existingAttendance);
 

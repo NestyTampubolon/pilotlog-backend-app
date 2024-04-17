@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.util.List;
 
@@ -29,6 +30,11 @@ public class AttendanceController {
     @GetMapping("admin/attendance")
     public List<Attendance> getAllAttendance(){
         return attendanceService.getAllAttendance();
+    }
+
+    @PostMapping("admin/attendance")
+    public List<Attendance> getAllAttendanceByDate(@RequestBody Attendance attendance) throws ParseException {
+        return attendanceService.getAllAttendanceByDate(attendance);
     }
 
     @GetMapping("public/attendance/{id}")
@@ -76,7 +82,15 @@ public class AttendanceController {
         return new ResponseEntity<Attendance>(attendanceService.addSignatureInstructor(signatureData,id), HttpStatus.OK);
     }
 
+    @GetMapping("instructor/attendancebyidtrainingclass/{id}")
+    public List<Attendance> getAttendanceDetailByIdInstructorAndIdTrainingClass(@PathVariable("id") String idtrainingclass){
+        return attendanceService.getAttendanceByIdInstructorAndIdTrainingClass(idtrainingclass);
+    }
 
+    @PutMapping("admin/updatedoneattendance/{id}")
+    public ResponseEntity<Attendance> updateDoneAttendance(@PathVariable("id") String id){
+        return new ResponseEntity<Attendance>(attendanceService.updateDoneAttendance(id), HttpStatus.OK);
+    }
 
 
 

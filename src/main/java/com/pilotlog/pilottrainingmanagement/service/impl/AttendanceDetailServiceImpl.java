@@ -204,8 +204,10 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
         }
     }
 
-
-
+    @Override
+    public List<AttendanceDetail> findAttendanceDetailsByTraineeId(String id) {
+        return attendanceDetailRepository.findAttendanceDetailsByTraineeId(id);
+    }
 
 
     @Override

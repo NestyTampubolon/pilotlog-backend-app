@@ -49,7 +49,7 @@ public class TrainingClassImpl implements TrainingClassService {
 
     @Override
     public List<TrainingClass> getAllTrainingClass() {
-        return trainingClassRepository.findAllByIsDelete((byte) 0);
+        return trainingClassRepository.findAllByIdCompany(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
     @Override

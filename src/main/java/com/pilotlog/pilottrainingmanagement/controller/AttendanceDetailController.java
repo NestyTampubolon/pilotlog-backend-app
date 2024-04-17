@@ -94,4 +94,9 @@ public class AttendanceDetailController {
         }
     }
 
+    @GetMapping("admin/attendancedetailbyidtrainee/{id}")
+    public List<AttendanceDetail> getAttendanceDetailByIdTrainee(@PathVariable("id") String id_users){
+        return attendanceDetailService.findAttendanceDetailsByTraineeId(id_users);
+    }
+
 }

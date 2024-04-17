@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 @Data

@@ -1,15 +1,23 @@
 package com.pilotlog.pilottrainingmanagement.controller;
 
+import com.pilotlog.pilottrainingmanagement.model.Company;
 import com.pilotlog.pilottrainingmanagement.model.Users;
 import com.pilotlog.pilottrainingmanagement.service.CompanyService;
 import com.pilotlog.pilottrainingmanagement.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
-
+import org.springframework.core.io.Resource;
 @RestController
 @RequestMapping("/api/v1/")
 @RequiredArgsConstructor
@@ -31,6 +39,11 @@ public class UsersController {
     @GetMapping("admin/instructor")
     public List<Users> getAllInstructor(){
         return usersService.getAllInstructor();
+    }
+
+    @GetMapping("admin/cpts")
+    public List<Users> getAllCPTS(){
+        return usersService.getAllCPTS();
     }
 
     //build get employee by id
@@ -71,5 +84,24 @@ public class UsersController {
     @PutMapping("public/changepassword/{id}")
     public ResponseEntity<Users> changePassword(@PathVariable("id") String id, @RequestBody Users users){
         return new ResponseEntity<Users>(usersService.changePassword(users, id), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "admin/users/update/profile/{id}")
+    public ResponseEntity<Users> updateProfile(@PathVariable("id") String id,
+                                              @RequestBody MultipartFile profile) {
+        return new ResponseEntity<>(usersService.updatePhotoProfile(profile, id), HttpStatus.OK);
+    }
+
+    @Value("${profile.directory}")
+    private String profileDirectory;
+
+    @GetMapping("images/profile/{imageName}")
+    public ResponseEntity<Resource> getImageProfile(@PathVariable String imageName) throws MalformedURLException {
+        Path imagePath = Paths.get(profileDirectory).resolve(imageName);
+        Resource imageResource = new UrlResource(imagePath.toUri());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(imageResource);
     }
 }

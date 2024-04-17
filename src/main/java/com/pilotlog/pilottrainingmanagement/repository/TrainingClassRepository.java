@@ -1,5 +1,6 @@
 package com.pilotlog.pilottrainingmanagement.repository;
 
+import com.pilotlog.pilottrainingmanagement.model.Attendance;
 import com.pilotlog.pilottrainingmanagement.model.Certificate;
 import com.pilotlog.pilottrainingmanagement.model.TrainingClass;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,9 @@ import java.util.List;
 import java.util.Optional;
 public interface TrainingClassRepository extends JpaRepository<TrainingClass, String> {
 
-    List<TrainingClass> findAllByIsDelete(byte isDelete);
+    @Query(value= "SELECT * FROM trainingclass WHERE is_delete = 0 AND id_company = :idCompany", nativeQuery = true)
+    List<TrainingClass> findAllByIdCompany(String idCompany);
+
 
     @Query(value = "SELECT id_trainingclass FROM TrainingClass WHERE id_company = :idCompany ORDER BY created_at DESC LIMIT 1", nativeQuery = true)
     String findLastIdByIdCompany(@Param("idCompany") String idCompany);

@@ -12,9 +12,9 @@ public interface StatementsRepository extends JpaRepository<Statements, String> 
     @Query(value = "SELECT * FROM statements WHERE id_company = :idCompany AND is_delete = 0", nativeQuery = true)
     List<Statements> findAllByCompanyIdAndIsDeleteIsZero(@Param("idCompany") String idCompany);
 
-    @Query(value = "SELECT * FROM statements WHERE id_company = :idCompany AND is_delete = 0 AND statement_type = 'forInstructor'", nativeQuery = true)
+    @Query(value = "SELECT * FROM statements WHERE id_company = :idCompany AND is_delete = 0 AND statement_type = 'forInstructor' AND is_active = 1", nativeQuery = true)
     List<Statements> findAllStatementsForInstructor(@Param("idCompany") String idCompany);
 
-    @Query(value = "SELECT * FROM statements WHERE id_company = :idCompany AND is_delete = 0 AND statement_type = 'forTrainee'", nativeQuery = true)
+    @Query(value = "SELECT * FROM statements WHERE id_company = :idCompany AND is_delete = 0 AND statement_type = 'forTrainee' AND is_active = 1", nativeQuery = true)
     List<Statements> findAllStatementsForTrainee(@Param("idCompany") String idCompany);
 }

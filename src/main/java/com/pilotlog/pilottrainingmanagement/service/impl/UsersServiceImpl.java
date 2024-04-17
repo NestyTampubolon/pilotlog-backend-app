@@ -1,33 +1,36 @@
 package com.pilotlog.pilottrainingmanagement.service.impl;
 
 import com.pilotlog.pilottrainingmanagement.exception.ResourceNotFoundException;
-import com.pilotlog.pilottrainingmanagement.model.Company;
-import com.pilotlog.pilottrainingmanagement.model.StatusUsers;
 import com.pilotlog.pilottrainingmanagement.model.Users;
 import com.pilotlog.pilottrainingmanagement.repository.UsersRepository;
-import com.pilotlog.pilottrainingmanagement.service.AuthenticationService;
 import com.pilotlog.pilottrainingmanagement.service.UsersService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.module.ResolutionException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 @Service
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
-
     @Override
     public Users addUser(Users users){
 
@@ -57,12 +60,17 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public List<Users> getAllUsers(){
-        return usersRepository.findAll();
+        return usersRepository.findAllByCompanyId(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
     @Override
     public List<Users> getAllInstructor() {
         return usersRepository.findInstructorUsers();
+    }
+
+    @Override
+    public List<Users> getAllCPTS() {
+        return usersRepository.findCPTSUsers();
     }
 
     @Override
@@ -157,4 +165,58 @@ public class UsersServiceImpl implements UsersService {
             return existingUsers;
     }
 
+    @Value("${profile.directory}")
+    private String profileDirectory;
+
+    @Override
+    public Users updatePhotoProfile(MultipartFile profile, String id) {
+        Users existingUsers = usersRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Users", "Id", id));
+
+        if (profile != null && !profile.isEmpty()) {
+            try {
+                System.out.println(profile);
+                String profileFilename = saveProfile(profile);
+                existingUsers.setPhoto_profile(profileFilename);
+                return usersRepository.save(existingUsers);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to save profile file.", e);
+            }
+        } else {
+            throw new IllegalArgumentException("Profile is null or empty.");
+        }
+    }
+
+
+    private String saveProfile(MultipartFile file) throws IOException {
+        // Generate unique filename
+        String filename = UUID.randomUUID().toString() + ".png";
+        // Simpan file ke folder assets
+        Files.copy(file.getInputStream(), Paths.get(profileDirectory + filename), StandardCopyOption.REPLACE_EXISTING);
+        // Kembalikan alamat file gambar
+        return filename;
+    }
+
+    public ResponseEntity<byte[]> loadProfile(String filename) {
+        try {
+            // Baca file gambar dari sistem file
+            Path file = Paths.get(profileDirectory + filename);
+            byte[] data = Files.readAllBytes(file);
+
+            // Tentukan tipe konten sesuai dengan ekstensi file gambar
+            String contentType = Files.probeContentType(file);
+
+            // Buat header HTTP
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            headers.setContentLength(data.length);
+
+            // Kirim gambar sebagai respons HTTP
+            return new ResponseEntity<>(data, headers, HttpStatus.OK);
+        } catch (IOException e) {
+            // Tangani kesalahan jika gagal membaca file
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

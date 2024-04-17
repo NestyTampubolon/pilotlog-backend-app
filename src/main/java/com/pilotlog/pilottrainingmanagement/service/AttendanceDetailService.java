@@ -2,7 +2,6 @@ package com.pilotlog.pilottrainingmanagement.service;
 
 import com.pilotlog.pilottrainingmanagement.dto.AttendanceDetailRequest;
 import com.pilotlog.pilottrainingmanagement.model.AttendanceDetail;
-import com.pilotlog.pilottrainingmanagement.model.Statements;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
@@ -20,4 +19,5 @@ public interface AttendanceDetailService {
     List<AttendanceDetail> findPendingAttendanceDetailsByTraineeId();
     List<AttendanceDetail> getAttendanceDetailByIdTraineeAndIdTrainingClass(String idTrainingClass);
     Map<String, String> checkStatusAttendance(String id);
+    List<AttendanceDetail> findAttendanceDetailsByTraineeId(String id);
 }
