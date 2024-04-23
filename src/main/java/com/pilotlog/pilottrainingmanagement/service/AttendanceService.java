@@ -10,6 +10,7 @@ import java.util.List;
 public interface AttendanceService {
     Attendance addAttendance(Attendance attendance) throws ParseException;
     List<Attendance> getAllAttendance();
+    List<Attendance> getAllAttendanceDone(String idTrainingClass);
     List<Attendance> getAllAttendanceByDate(Attendance attendance) throws ParseException;
     Attendance getAttendanceById(String id);
     Attendance updateAttendance(Attendance attendance, String id) throws ParseException;

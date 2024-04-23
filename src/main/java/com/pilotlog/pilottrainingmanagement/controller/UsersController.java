@@ -41,6 +41,11 @@ public class UsersController {
         return usersService.getAllInstructor();
     }
 
+    @GetMapping("cpts/users")
+    public List<Users> getAllPilot(){
+        return usersService.getAllPilot();
+    }
+
     @GetMapping("admin/cpts")
     public List<Users> getAllCPTS(){
         return usersService.getAllCPTS();
@@ -86,7 +91,7 @@ public class UsersController {
         return new ResponseEntity<Users>(usersService.changePassword(users, id), HttpStatus.OK);
     }
 
-    @PutMapping(value = "admin/users/update/profile/{id}")
+    @PutMapping(value = "public/users/update/profile/{id}")
     public ResponseEntity<Users> updateProfile(@PathVariable("id") String id,
                                               @RequestBody MultipartFile profile) {
         return new ResponseEntity<>(usersService.updatePhotoProfile(profile, id), HttpStatus.OK);

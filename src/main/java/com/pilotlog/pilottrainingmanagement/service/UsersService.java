@@ -14,6 +14,7 @@ public interface UsersService {
     List<Users> getAllUsers();
     List<Users> getAllInstructor();
     List<Users> getAllCPTS();
+    List<Users> getAllPilot();
     Users getUsersById(String id);
     Users editUsers(Users users, String id);
     void deleteUsers(String id);

@@ -3,10 +3,7 @@ package com.pilotlog.pilottrainingmanagement.service.impl;
 import com.pilotlog.pilottrainingmanagement.dto.AttendanceDetailRequest;
 import com.pilotlog.pilottrainingmanagement.exception.ResourceNotFoundException;
 import com.pilotlog.pilottrainingmanagement.model.*;
-import com.pilotlog.pilottrainingmanagement.repository.AssessmentsRepository;
-import com.pilotlog.pilottrainingmanagement.repository.AttendanceDetailRepository;
-import com.pilotlog.pilottrainingmanagement.repository.AttendanceRepository;
-import com.pilotlog.pilottrainingmanagement.repository.StatementsRepository;
+import com.pilotlog.pilottrainingmanagement.repository.*;
 import com.pilotlog.pilottrainingmanagement.service.AttendanceDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
     private final AttendanceRepository attendanceRepository;
     private final AssessmentsRepository assessmentsRepository;
     private final StatementsRepository statementsRepository;
+    private final UsersRepository usersRepository;
 
     @Override
     public Map<String, String> enrollAttendance(AttendanceDetail attendanceDetail) throws ParseException {
@@ -52,7 +50,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
                 newAttendanceDetail.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
 
                 attendanceDetailRepository.save(newAttendanceDetail);
-
+                response.put("attendanceDetailId", String.valueOf(newAttendanceDetail.getId_attendancedetail()));
                 response.put("status", "success");
                 response.put("message", "Attendance enrolled successfully.");
             } else {
@@ -90,6 +88,8 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
     public AttendanceDetail getAttendanceDetailById(Long id) {
         return attendanceDetailRepository.findById(String.valueOf(id)).orElseThrow(() -> new ResourceNotFoundException("Attendance", "Id", id));
     }
+
+    @Override
     public ResponseEntity<?> addGradeAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id) {
         try {
             AttendanceDetail existingAttendanceDetail = attendanceDetailRepository.findById(String.valueOf(id)).orElseThrow(
@@ -101,6 +101,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
                 existingAttendanceDetail.setScore(attendanceDetail.getAttendanceDetail().getScore());
             }
             existingAttendanceDetail.setGrade(attendanceDetail.getAttendanceDetail().getGrade());
+            existingAttendanceDetail.setDescription(attendanceDetail.getAttendanceDetail().getDescription());
             existingAttendanceDetail.setStatus("Done");
             existingAttendanceDetail.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
 
@@ -136,6 +137,48 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
     }
 
     @Override
+    public ResponseEntity<?> addFeedbackAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id) {
+        try {
+            AttendanceDetail existingAttendanceDetail = attendanceDetailRepository.findById(String.valueOf(id)).orElseThrow(
+                    () -> new ResourceNotFoundException("Attendance Detail", "Id", id)
+            );
+
+            existingAttendanceDetail.setFeedback(attendanceDetail.getAttendanceDetail().getFeedback());
+            existingAttendanceDetail.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
+
+            // Menyimpan penilaian baru
+            attendanceDetail.getRatings().forEach((statement, ratingValue) -> {
+                Statements statements = statementsRepository.findById(String.valueOf(statement)).orElseThrow(
+                        () -> new ResourceNotFoundException("Statements", "id_statements", statement)
+                );
+
+                Assessments newAssessments = new Assessments();
+                newAssessments.setId_statements(statements);
+                newAssessments.setRating(ratingValue);
+                newAssessments.setIdAttendanceDetail(existingAttendanceDetail);
+                newAssessments.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
+                newAssessments.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
+                newAssessments.setCreated_by(AuthenticationServiceImpl.getUserInfo());
+                newAssessments.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
+                assessmentsRepository.save(newAssessments);
+            });
+
+            // Menyimpan perubahan pada AttendanceDetail yang ada
+            attendanceDetailRepository.save(existingAttendanceDetail);
+
+            // Mengembalikan ResponseEntity dengan status 200 OK dan data yang diperbarui
+            return ResponseEntity.ok().build();
+        } catch (ResourceNotFoundException ex) {
+            // Menangani pengecualian ResourceNotFoundException dengan mengembalikan status 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (Exception ex) {
+            // Menangani pengecualian umum dengan mengembalikan status 500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Terjadi kesalahan: " + ex.getMessage());
+        }
+    }
+
+
+    @Override
     public ResponseEntity<?> updateGradeAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id) {
         try {
             AttendanceDetail existingAttendanceDetail = attendanceDetailRepository.findById(String.valueOf(id)).orElseThrow(
@@ -147,6 +190,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
                 existingAttendanceDetail.setScore(attendanceDetail.getAttendanceDetail().getScore());
             }
             existingAttendanceDetail.setGrade(attendanceDetail.getAttendanceDetail().getGrade());
+            existingAttendanceDetail.setDescription(attendanceDetail.getAttendanceDetail().getDescription());
             existingAttendanceDetail.setStatus("Confirmation");
             existingAttendanceDetail.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
 
@@ -209,6 +253,11 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
         return attendanceDetailRepository.findAttendanceDetailsByTraineeId(id);
     }
 
+    @Override
+    public List<AttendanceDetail> getAttendanceValidToByTrainingClass(String id) {
+        return attendanceDetailRepository.findAttendanceValidToByTrainingClass(id);
+    }
+
 
     @Override
     public List<AttendanceDetail> findPendingAttendanceDetailsByTraineeId() {
@@ -216,9 +265,14 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
         return attendanceDetailRepository.findAttendanceDetailsByTraineeIdAndStatus(traineeId.getId_users(), "Pending");
     }
 
+//    @Override
+//    public List<AttendanceDetail> getAttendanceDetailByIdTraineeAndIdTrainingClass(String idTrainingClass) {
+//        Users traineeId = AuthenticationServiceImpl.getUserProfileInfo();
+//        return attendanceDetailRepository.findAttendanceDetailsByTraineeIdAndIdTrainingClass(traineeId.getId_users(), idTrainingClass);
+//    }
+
     @Override
-    public List<AttendanceDetail> getAttendanceDetailByIdTraineeAndIdTrainingClass(String idTrainingClass) {
-        Users traineeId = AuthenticationServiceImpl.getUserProfileInfo();
-        return attendanceDetailRepository.findAttendanceDetailsByTraineeIdAndIdTrainingClass(traineeId.getId_users(), idTrainingClass);
+    public List<AttendanceDetail> getAttendanceDetailByIdTraineeAndIdTrainingClass(String idTrainee, String idtrainingclass) {
+        return attendanceDetailRepository.findAttendanceDetailsByTraineeIdAndIdTrainingClass(idTrainee, idtrainingclass);
     }
 }

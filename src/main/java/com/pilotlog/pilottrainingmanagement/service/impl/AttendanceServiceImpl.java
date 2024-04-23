@@ -84,6 +84,11 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
+    public List<Attendance> getAllAttendanceDone(String idTrainingClass) {
+        return attendanceRepository.findAllDoneByIdCompany(AuthenticationServiceImpl.getCompanyInfo().getId_company(), idTrainingClass);
+    }
+
+    @Override
     public List<Attendance> getAllAttendanceByDate(Attendance attendance) throws ParseException {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

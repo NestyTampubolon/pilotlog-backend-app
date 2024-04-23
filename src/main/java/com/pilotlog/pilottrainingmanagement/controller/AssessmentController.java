@@ -1,5 +1,6 @@
 package com.pilotlog.pilottrainingmanagement.controller;
 
+import com.pilotlog.pilottrainingmanagement.dto.AttendanceDetailRequest;
 import com.pilotlog.pilottrainingmanagement.model.Assessments;
 import com.pilotlog.pilottrainingmanagement.model.Attendance;
 import com.pilotlog.pilottrainingmanagement.service.AssessmentsService;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -16,13 +18,24 @@ import java.text.ParseException;
 public class AssessmentController {
     private final AssessmentsService assessmentsService;
 
-    @PostMapping("trainee/addAssessment")
-    public ResponseEntity<Assessments> addAssessment(@RequestBody Assessments assessments) throws ParseException {
-        return new ResponseEntity<>(assessmentsService.addAssessments(assessments), HttpStatus.CREATED);
+    @GetMapping("public/assessment/{id}")
+    public ResponseEntity<Assessments> getAssessmentById(@PathVariable("id") Long idattendancedetail){
+        return new ResponseEntity(assessmentsService.getAssessmentByIdAttendenceDetail(idattendancedetail), HttpStatus.OK);
     }
 
-    @GetMapping("instructor/assessment/{id}")
-    public ResponseEntity<Assessments> getAssessmentById(@PathVariable("id") Long idattendance){
-        return new ResponseEntity(assessmentsService.getAssessmentByIdAttendenceDetail(idattendance), HttpStatus.OK);
+    @GetMapping("cpts/assessmentforTrainee/{id}")
+    public ResponseEntity<Assessments> getAssessmentByIdForTrainee(@PathVariable("id") Long idattendancedetail){
+        return new ResponseEntity(assessmentsService.getAssessmentByIdAttendenceDetailForTrainee(idattendancedetail), HttpStatus.OK);
+    }
+
+
+    @GetMapping("cpts/assessmentbyidattendance/{id}")
+    public ResponseEntity<Assessments> getAssessmentByIdAttendance(@PathVariable("id") String idattendance){
+        return new ResponseEntity(assessmentsService.findAllByidAttendanceForInstructor(idattendance), HttpStatus.OK);
+    }
+
+    @GetMapping("trainee/checkFeedback/{id}")
+    public boolean checkFeedback(@PathVariable("id") String id) {
+        return assessmentsService.existsAssessmentsByIdAttendanceDetail(id);
     }
 }

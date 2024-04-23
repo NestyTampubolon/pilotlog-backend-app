@@ -74,6 +74,11 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
+    public List<Users> getAllPilot() {
+        return usersRepository.findAllPilotByCompanyId(AuthenticationServiceImpl.getCompanyInfo().getId_company());
+    }
+
+    @Override
     public Users getUsersById(String id){
 //        Optional<Users> users = usersRepository.findById(id);
 //        return users.get();
@@ -172,7 +177,8 @@ public class UsersServiceImpl implements UsersService {
     public Users updatePhotoProfile(MultipartFile profile, String id) {
         Users existingUsers = usersRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Users", "Id", id));
-
+        System.out.println(id);
+        System.out.println(profile);
         if (profile != null && !profile.isEmpty()) {
             try {
                 System.out.println(profile);

@@ -32,6 +32,11 @@ public class AttendanceController {
         return attendanceService.getAllAttendance();
     }
 
+    @GetMapping("cpts/attendance/{id}")
+    public List<Attendance> getAllAttendanceDone(@PathVariable("id") String idtrainingclass){
+        return attendanceService.getAllAttendanceDone(idtrainingclass);
+    }
+
     @PostMapping("admin/attendance")
     public List<Attendance> getAllAttendanceByDate(@RequestBody Attendance attendance) throws ParseException {
         return attendanceService.getAllAttendanceByDate(attendance);

@@ -48,15 +48,26 @@ public class AttendanceDetailController {
         return attendanceDetailService.getAllAttendanceDetailByIdAttendance(idattendance);
     }
 
-    @GetMapping("trainee/attendancedetail/{id}")
+    @GetMapping("public/attendancedetail/{id}")
     public ResponseEntity<AttendanceDetail> getAttendanceDetailByIdAttendance(@PathVariable("id") Long idattendancedetail){
         return new ResponseEntity<AttendanceDetail>(attendanceDetailService.getAttendanceDetailById(idattendancedetail), HttpStatus.OK);
     }
 
-    @PutMapping("instructor/attendancedetail/{id}")
+    @GetMapping("cpts/allattendance/{id}")
+    public List<AttendanceDetail> getAttendanceValidToByTrainingClass(@PathVariable("id") String idattendance){
+        return attendanceDetailService.getAttendanceValidToByTrainingClass(idattendance);
+    }
+
+    @PutMapping("instructor/addgrade/{id}")
     public ResponseEntity<?>  addGradeAttendanceDetailById(@PathVariable("id") Long id,
                                                                          @RequestBody AttendanceDetailRequest request){
         return attendanceDetailService.addGradeAttendanceDetailById(request,id);
+    }
+
+    @PostMapping("trainee/addAssessment/{id}")
+    public ResponseEntity<?>  addFeedbackAttendanceDetailById(@PathVariable("id") Long id,
+                                                           @RequestBody AttendanceDetailRequest request){
+        return attendanceDetailService.addFeedbackAttendanceDetailById(request,id);
     }
 
     @PutMapping("instructor/updateattendancedetail/{id}")
@@ -71,9 +82,9 @@ public class AttendanceDetailController {
         return new ResponseEntity<AttendanceDetail>(attendanceDetailService.addSignature(signatureData,id), HttpStatus.OK);
     }
 
-    @GetMapping("trainee/attendancedetailbyidtrainingclass/{id}")
-    public List<AttendanceDetail> getAttendanceDetailByIdTraineeaAndIdAttendanceClass(@PathVariable("id") String idtrainingclass){
-        return attendanceDetailService.getAttendanceDetailByIdTraineeAndIdTrainingClass(idtrainingclass);
+    @GetMapping("public/attendancedetailbyidtrainingclass/{idTrainee}/{id}")
+    public List<AttendanceDetail> getAttendanceDetailByIdTraineeaAndIdAttendanceClass(@PathVariable("id") String idtrainingclass, @PathVariable("idTrainee") String idTrainee){
+        return attendanceDetailService.getAttendanceDetailByIdTraineeAndIdTrainingClass(idTrainee, idtrainingclass);
     }
 
     @GetMapping("trainee/attendancedetail/recentclass")

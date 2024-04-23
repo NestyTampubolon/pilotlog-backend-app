@@ -15,9 +15,14 @@ public interface AttendanceDetailService {
     List<AttendanceDetail> getAllAttendanceDetailByIdAttendance(String idAttendance);
     AttendanceDetail getAttendanceDetailById(Long id);
     ResponseEntity<?> addGradeAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id);
+
+    ResponseEntity<?> addFeedbackAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id);
+
     ResponseEntity<?> updateGradeAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id);
     List<AttendanceDetail> findPendingAttendanceDetailsByTraineeId();
-    List<AttendanceDetail> getAttendanceDetailByIdTraineeAndIdTrainingClass(String idTrainingClass);
+    List<AttendanceDetail> getAttendanceDetailByIdTraineeAndIdTrainingClass(String idTrainee, String idtrainingclass);
     Map<String, String> checkStatusAttendance(String id);
     List<AttendanceDetail> findAttendanceDetailsByTraineeId(String id);
+    List<AttendanceDetail> getAttendanceValidToByTrainingClass(String id);
+
 }

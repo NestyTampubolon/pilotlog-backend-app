@@ -15,6 +15,11 @@ public interface UsersRepository extends JpaRepository<Users, String> {
     @Query(value= "SELECT * FROM Users  WHERE id_company = :companyId", nativeQuery = true)
     List<Users> findAllByCompanyId(String companyId);
 
+    @Query(value= "SELECT * FROM Users  WHERE id_company = :companyId AND is_active = 1 AND role != 'ADMIN'", nativeQuery = true)
+    List<Users> findAllPilotByCompanyId(String companyId);
+
+
+
     Optional<Users> findByEmail(String email);
     Users findByRole(Role role);
 
