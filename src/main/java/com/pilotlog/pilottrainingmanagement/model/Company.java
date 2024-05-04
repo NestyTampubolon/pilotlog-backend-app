@@ -27,6 +27,10 @@ public class Company {
     @Column(name = "contact")
     private String contact;
 
+    @Column(name = "is_active", nullable = false)
+    private byte is_active;
+
+
     @Column(name = "is_delete", nullable = false)
     private byte is_delete;
 

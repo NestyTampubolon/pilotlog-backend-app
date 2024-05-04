@@ -30,7 +30,7 @@ public class TrainingController {
         return new ResponseEntity<>(trainingClassService.addTraining(trainingClass), HttpStatus.CREATED);
     }
 
-    @GetMapping("admin/training")
+    @GetMapping("public/training")
     public List<TrainingClass> getAllTrainingClass(){
         return trainingClassService.getAllTrainingClass();
     }

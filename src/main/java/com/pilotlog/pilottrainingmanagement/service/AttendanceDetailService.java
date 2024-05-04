@@ -1,6 +1,7 @@
 package com.pilotlog.pilottrainingmanagement.service;
 
 import com.pilotlog.pilottrainingmanagement.dto.AttendanceDetailRequest;
+import com.pilotlog.pilottrainingmanagement.model.Attendance;
 import com.pilotlog.pilottrainingmanagement.model.AttendanceDetail;
 import org.springframework.http.ResponseEntity;
 
@@ -10,7 +11,7 @@ import java.util.Map;
 
 public interface AttendanceDetailService {
 
-    Map<String, String> enrollAttendance(AttendanceDetail attendanceDetail) throws ParseException;
+    Map<String, String> enrollAttendance(Attendance attendances) throws ParseException;
     AttendanceDetail addSignature(byte[] signatureData, Long id);
     List<AttendanceDetail> getAllAttendanceDetailByIdAttendance(String idAttendance);
     AttendanceDetail getAttendanceDetailById(Long id);
@@ -19,6 +20,10 @@ public interface AttendanceDetailService {
     ResponseEntity<?> addFeedbackAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id);
 
     ResponseEntity<?> updateGradeAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id);
+
+    ResponseEntity<?> getValidationPilot(String id);
+    ResponseEntity<?> getValidationAllPilot();
+
     List<AttendanceDetail> findPendingAttendanceDetailsByTraineeId();
     List<AttendanceDetail> getAttendanceDetailByIdTraineeAndIdTrainingClass(String idTrainee, String idtrainingclass);
     Map<String, String> checkStatusAttendance(String id);

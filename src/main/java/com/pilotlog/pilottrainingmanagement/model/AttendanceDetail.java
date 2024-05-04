@@ -51,6 +51,4 @@ public class AttendanceDetail {
     @ManyToOne
     @JoinColumn(name="id_trainee")
     private Users idTrainee;
-
-    private String keyAttendance;
 }

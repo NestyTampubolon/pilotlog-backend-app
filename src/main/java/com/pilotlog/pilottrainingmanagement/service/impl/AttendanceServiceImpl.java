@@ -2,8 +2,12 @@ package com.pilotlog.pilottrainingmanagement.service.impl;
 
 import com.pilotlog.pilottrainingmanagement.exception.ResourceNotFoundException;
 import com.pilotlog.pilottrainingmanagement.model.Attendance;
+import com.pilotlog.pilottrainingmanagement.model.AttendanceDetail;
 import com.pilotlog.pilottrainingmanagement.model.Status;
+import com.pilotlog.pilottrainingmanagement.model.TrainingClass;
+import com.pilotlog.pilottrainingmanagement.repository.AttendanceDetailRepository;
 import com.pilotlog.pilottrainingmanagement.repository.AttendanceRepository;
+import com.pilotlog.pilottrainingmanagement.service.AttendanceDetailService;
 import com.pilotlog.pilottrainingmanagement.service.AttendanceService;
 import com.pilotlog.pilottrainingmanagement.service.TrainingClassService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +31,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
+    private final AttendanceDetailRepository attendanceDetailRepository;
+    private final AttendanceDetailService attendanceDetailService;
 
     @Autowired
     private final TrainingClassService trainingClassService;
@@ -185,22 +191,30 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public Attendance confirmationAttendancebyAdmin(Attendance attendance, String id) {
-        Attendance existingAttandance = attendanceRepository.findById(id).orElseThrow(
+        Attendance existingAttendance = attendanceRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Attendance", "Id", id)
         );
 
-        existingAttandance.setStatus(Status.valueOf("Done"));
-        return existingAttandance;
+        existingAttendance.setStatus(Status.Done);
+        existingAttendance.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
+        attendanceRepository.save(existingAttendance);
+
+        List<AttendanceDetail>  attendanceDetails = attendanceDetailRepository.findAllByIdAttendance(id);
+        for (AttendanceDetail ad : attendanceDetails) {
+            System.out.println(ad.getIdTrainee().getId_users());
+            attendanceDetailService.getValidationPilot(ad.getIdTrainee().getId_users());
+        }
+        return existingAttendance;
     }
 
     @Override
     public List<Attendance> getAttendancePendingByIdInstructor() {
-        return attendanceRepository.getAttendancePendingByIdInstructor(AuthenticationServiceImpl.getUserInfo());
+        return attendanceRepository.getAttendancePendingByIdInstructor(AuthenticationServiceImpl.getUserInfo(), AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
     @Override
     public List<Attendance> getAttendanceConfirmationDoneByIdInstructor() {
-        return attendanceRepository.getAttendanceConfirmationDoneByIdInstructor(AuthenticationServiceImpl.getUserInfo());
+        return attendanceRepository.getAttendanceConfirmationDoneByIdInstructor(AuthenticationServiceImpl.getUserInfo(), AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
     @Override
@@ -222,16 +236,5 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendanceRepository.getAttendanceByIdInstructorAndIdTrainingClass(AuthenticationServiceImpl.getUserInfo(), id);
     }
 
-    @Override
-    public Attendance updateDoneAttendance(String id) {
-        Attendance existingAttendance = attendanceRepository.findById(String.valueOf(id)).orElseThrow(
-                () -> new ResourceNotFoundException("Attendance", "Id", id)
-        );
 
-        existingAttendance.setStatus(Status.Done);
-        existingAttendance.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
-        attendanceRepository.save(existingAttendance);
-
-        return existingAttendance;
-    }
 }

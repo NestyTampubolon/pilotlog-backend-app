@@ -10,7 +10,6 @@ public interface AuthenticationService {
     ResponseEntity<?> signUp(SignUpRequest signUpRequest);
     JwtAuthenticationResponse signIn(Users users);
     JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest);
-
     Users getUserProfile();
 
 }

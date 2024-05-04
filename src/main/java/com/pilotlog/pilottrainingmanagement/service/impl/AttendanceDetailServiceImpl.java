@@ -5,8 +5,10 @@ import com.pilotlog.pilottrainingmanagement.exception.ResourceNotFoundException;
 import com.pilotlog.pilottrainingmanagement.model.*;
 import com.pilotlog.pilottrainingmanagement.repository.*;
 import com.pilotlog.pilottrainingmanagement.service.AttendanceDetailService;
+import com.pilotlog.pilottrainingmanagement.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -14,8 +16,12 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
 @Service
 @RequiredArgsConstructor
 public class AttendanceDetailServiceImpl implements AttendanceDetailService {
@@ -24,13 +30,16 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
     private final AssessmentsRepository assessmentsRepository;
     private final StatementsRepository statementsRepository;
     private final UsersRepository usersRepository;
+    private final CompanyService companyService;
+    private final TrainingClassRepository trainingClassRepository;
+
 
     @Override
-    public Map<String, String> enrollAttendance(AttendanceDetail attendanceDetail) throws ParseException {
+    public Map<String, String> enrollAttendance(Attendance attendances) throws ParseException {
         Map<String, String> response = new HashMap<>();
 
         // Retrieve the Attendance entity by keyAttendance
-        Attendance attendance = attendanceRepository.findByKeyAttendance(attendanceDetail.getKeyAttendance());
+        Attendance attendance = attendanceRepository.findByKeyAttendance(attendances.getKeyAttendance());
 
         // Check if attendance with provided keyAttendance exists
         if (attendance != null) {
@@ -191,7 +200,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
             }
             existingAttendanceDetail.setGrade(attendanceDetail.getAttendanceDetail().getGrade());
             existingAttendanceDetail.setDescription(attendanceDetail.getAttendanceDetail().getDescription());
-            existingAttendanceDetail.setStatus("Confirmation");
+            existingAttendanceDetail.setStatus("Done");
             existingAttendanceDetail.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
 
             // Menyimpan penilaian baru
@@ -256,6 +265,89 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
     @Override
     public List<AttendanceDetail> getAttendanceValidToByTrainingClass(String id) {
         return attendanceDetailRepository.findAttendanceValidToByTrainingClass(id);
+    }
+
+    LocalDate currentDate = LocalDate.now();
+
+    @Override
+    public ResponseEntity<?> getValidationPilot(String id) {
+        Users existingUsers = usersRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Users", "Id", id)
+        );
+
+
+        List<TrainingClass> training = trainingClassRepository.findAllByIdCompany(AuthenticationServiceImpl.getCompanyInfo().getId_company());
+        List<AttendanceDetail>  attendance = attendanceDetailRepository.findAttendanceValidToByTrainingClass(id);
+        // List untuk menyimpan ID training yang ditemukan di attendance
+        Set<String> foundTrainingIDs = new HashSet<>();
+
+        // Variable untuk menyimpan jumlah data yang valid dan tidak valid
+        int validCount = 0;
+        int totalCount = 0;
+
+        // Iterasi melalui daftar training
+        for (TrainingClass train : training) {
+            String trainingID = train.getId_trainingclass(); // Mendapatkan ID training
+            totalCount++; // Menambahkan jumlah total training yang diperiksa
+
+            // Memeriksa apakah training ID ada di daftar attendance
+            boolean found = false;
+            for (AttendanceDetail detail : attendance) {
+                if (trainingID.equals(detail.getIdAttendance().getId_trainingclass().getId_trainingclass())) {
+                    found = true;
+                    LocalDate validTo = detail.getIdAttendance().getValid_to().toLocalDate(); // Mendapatkan tanggal valid_to
+                    if (validTo.isAfter(currentDate)) {
+//                        System.out.println("ID di Attendance: " + trainingID);
+//                        System.out.println("Valid To : " + validTo + " (VALID)");
+                        validCount++; // Menambahkan jumlah data yang valid
+                    } else {
+//                        System.out.println("ID di Attendance: " + trainingID);
+//                        System.out.println("Valid To : " + validTo + " (NOT VALID)");
+                    }
+                    break;
+                }
+            }
+
+            // Jika training ID tidak ditemukan di daftar attendance, berikan status FAIL
+            if (!found) {
+                System.out.println("ID di Attendance: " + trainingID);
+                System.out.println("Status : FAIL");
+                existingUsers.setStatus("NOT VALID");
+            }
+
+            // Menambahkan ID training ke dalam set foundTrainingIDs
+            foundTrainingIDs.add(trainingID);
+        }
+
+            // Jika jumlah total training yang diperiksa sama dengan jumlah training yang ditemukan di attendance,
+            // maka periksa apakah semua data memberikan status VALID
+        if (totalCount == foundTrainingIDs.size()) {
+            if (validCount == totalCount) {
+                System.out.println("Status: PASS");
+                existingUsers.setStatus("VALID");
+            } else {
+                System.out.println("Status: FAIL");
+                existingUsers.setStatus("NOT VALID");
+            }
+        } else {
+            System.out.println("Status: FAIL");
+            existingUsers.setStatus("NOT VALID");
+        }
+        usersRepository.save(existingUsers);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<?> getValidationAllPilot(){
+
+            List<Users> users = usersRepository.findAllPilotByCompanyId(AuthenticationServiceImpl.getCompanyInfo().getId_company());
+            for(Users u : users){
+                getValidationPilot(u.getId_users());
+            }
+
+
+        return ResponseEntity.ok().build();
+
     }
 
 

@@ -27,7 +27,6 @@ public interface AttendanceDetailRepository extends JpaRepository<AttendanceDeta
     @Query(value= "SELECT ad.* FROM attendancedetail ad JOIN attendance a ON ad.id_attendance = a.id_attendance WHERE ad.id_trainee = :traineeId AND a.is_delete = 0 ORDER BY a.date DESC", nativeQuery = true)
     List<AttendanceDetail> findAttendanceDetailsByTraineeId(String traineeId);
 
-    @Query(value= "SELECT ad.* FROM attendancedetail ad JOIN attendance a ON ad.id_attendance = a.id_attendance WHERE ad.id_trainee = :traineeId AND a.is_delete = 0  AND a.valid_to = (SELECT MAX(a2.valid_to) FROM attendance a2 WHERE a2.id_trainingclass = a.id_trainingclass AND a2.is_delete = 0) ORDER BY a.valid_to DESC", nativeQuery = true)
+    @Query(value= "SELECT ad.* FROM attendancedetail ad JOIN attendance a ON ad.id_attendance = a.id_attendance WHERE ad.id_trainee = :traineeId AND a.is_delete = 0  AND a.valid_to = (SELECT MAX(a2.valid_to) FROM attendance a2 WHERE a2.id_trainingclass = a.id_trainingclass AND a2.is_delete = 0 AND a2.status = 'Done') ORDER BY a.valid_to DESC", nativeQuery = true)
     List<AttendanceDetail> findAttendanceValidToByTrainingClass(String traineeId);
-
 }

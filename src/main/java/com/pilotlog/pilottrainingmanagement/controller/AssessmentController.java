@@ -3,6 +3,7 @@ package com.pilotlog.pilottrainingmanagement.controller;
 import com.pilotlog.pilottrainingmanagement.dto.AttendanceDetailRequest;
 import com.pilotlog.pilottrainingmanagement.model.Assessments;
 import com.pilotlog.pilottrainingmanagement.model.Attendance;
+import com.pilotlog.pilottrainingmanagement.model.Users;
 import com.pilotlog.pilottrainingmanagement.service.AssessmentsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,5 +39,10 @@ public class AssessmentController {
     @GetMapping("trainee/checkFeedback/{id}")
     public boolean checkFeedback(@PathVariable("id") String id) {
         return assessmentsService.existsAssessmentsByIdAttendanceDetail(id);
+    }
+
+    @GetMapping("public/getgradeinstructor")
+    public List<?> getGradeInstructor() {
+        return assessmentsService.getGradeInstructor();
     }
 }

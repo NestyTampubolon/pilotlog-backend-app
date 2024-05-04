@@ -11,4 +11,5 @@ public interface CompanyService {
     Company getCompanyById(String id);
     Company updateCompany(Company company, String id);
     Company updateLogo(MultipartFile logo, String id);
+    Company activationCompany(Company company, String id);
 }

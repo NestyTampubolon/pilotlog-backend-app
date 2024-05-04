@@ -10,6 +10,7 @@ import com.pilotlog.pilottrainingmanagement.model.Role;
 import com.pilotlog.pilottrainingmanagement.model.Users;
 import com.pilotlog.pilottrainingmanagement.repository.CompanyRepository;
 import com.pilotlog.pilottrainingmanagement.repository.UsersRepository;
+import com.pilotlog.pilottrainingmanagement.service.AttendanceDetailService;
 import com.pilotlog.pilottrainingmanagement.service.AuthenticationService;
 import com.pilotlog.pilottrainingmanagement.service.JWTService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
+@RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private final CompanyRepository companyRepository;
@@ -49,15 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Autowired
     private final JWTService jwtService;
 
-    @Autowired
-    public AuthenticationServiceImpl(CompanyRepository companyRepository, UsersRepository usersRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JWTService jwtService) {
-        this.companyRepository = companyRepository;
-        this.usersRepository = usersRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
-
+    private  final AttendanceDetailService attendanceDetailService;
     protected String generateUniqueCompanyId() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt;
@@ -95,6 +89,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             companyC.setEmail(signUpRequest.getCompany().getEmail());
             companyC.setLogo(signUpRequest.getCompany().getLogo());
             companyC.setContact(signUpRequest.getCompany().getContact());
+            companyC.setIs_active((byte) 0);
             companyC.setIs_delete((byte) 0);
             companyC.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
             companyC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
@@ -133,8 +128,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 
     public JwtAuthenticationResponse signIn(Users signinRequest){
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(signinRequest.getEmail(), signinRequest.getPassword());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(signinRequest.getEmail(), signinRequest.getPassword());
 
         try {
             System.out.println(signinRequest.getEmail());
@@ -151,7 +145,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         var user = usersRepository.findByEmail(signinRequest.getEmail()).orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-
         var jwt = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
 

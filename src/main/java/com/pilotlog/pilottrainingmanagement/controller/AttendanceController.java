@@ -91,12 +91,4 @@ public class AttendanceController {
     public List<Attendance> getAttendanceDetailByIdInstructorAndIdTrainingClass(@PathVariable("id") String idtrainingclass){
         return attendanceService.getAttendanceByIdInstructorAndIdTrainingClass(idtrainingclass);
     }
-
-    @PutMapping("admin/updatedoneattendance/{id}")
-    public ResponseEntity<Attendance> updateDoneAttendance(@PathVariable("id") String id){
-        return new ResponseEntity<Attendance>(attendanceService.updateDoneAttendance(id), HttpStatus.OK);
-    }
-
-
-
 }

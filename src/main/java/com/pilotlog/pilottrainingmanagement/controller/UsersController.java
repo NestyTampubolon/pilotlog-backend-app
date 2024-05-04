@@ -13,10 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.core.io.Resource;
 @RestController
 @RequestMapping("/api/v1/")
@@ -52,7 +55,7 @@ public class UsersController {
     }
 
     //build get employee by id
-    @GetMapping("admin/users/{id}")
+    @GetMapping("public/users/{id}")
     public ResponseEntity<Users> getUsersById(@PathVariable("id") String idusers){
         return new ResponseEntity<Users>(usersService.getUsersById(idusers), HttpStatus.OK);
     }
@@ -109,4 +112,12 @@ public class UsersController {
                 .contentType(MediaType.IMAGE_PNG)
                 .body(imageResource);
     }
+
+    @GetMapping("cpts/countpilot")
+    public ResponseEntity<Map<String, BigInteger>> findAllPilotsCountsByCompanyId(){
+        Map<String, BigInteger> pilotsCounts = usersService.findAllPilotsCountsByCompanyId();
+        System.out.println("check");
+        return ResponseEntity.ok(pilotsCounts);
+    }
+
 }

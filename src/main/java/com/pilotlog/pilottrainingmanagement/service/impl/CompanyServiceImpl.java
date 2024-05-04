@@ -14,7 +14,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -22,12 +21,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.UUID;
 @Service
 @RequiredArgsConstructor
-public class CompanyImpl implements CompanyService {
+public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     @Override
     public Company addCompany(Company company) {
@@ -91,6 +88,22 @@ public class CompanyImpl implements CompanyService {
                 throw new RuntimeException("Failed to save logo file.", e);
             }
         }
+        companyRepository.save(existingCompany);
+        return existingCompany;
+    }
+
+    @Override
+    public Company activationCompany(Company company, String id) {
+        Company existingCompany = companyRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Company", "Id", id)
+        );
+
+        if(existingCompany.getIs_active() == 0){
+            existingCompany.setIs_active((byte) 1) ;
+        }else if(existingCompany.getIs_active() == 1){
+            existingCompany.setIs_active((byte) 0) ;
+        }
+
         companyRepository.save(existingCompany);
         return existingCompany;
     }

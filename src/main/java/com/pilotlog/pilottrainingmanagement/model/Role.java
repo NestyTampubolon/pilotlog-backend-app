@@ -1,6 +1,7 @@
 package com.pilotlog.pilottrainingmanagement.model;
 
 public enum Role {
+    SUPERADMIN("Superadmin"),
     ADMIN("Admin"),
     TRAINEE("Trainee"),
     INSTRUCTOR("Instructor"),

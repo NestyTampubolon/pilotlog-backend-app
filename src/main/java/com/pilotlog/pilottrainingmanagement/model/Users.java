@@ -76,7 +76,8 @@ public class Users implements UserDetails {
     @JoinColumn(name="id_company")
     private Company id_company;
 
-
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private List<ForgotPassword> forgotPasswords;
 
     public String getPassword() {
         return password;

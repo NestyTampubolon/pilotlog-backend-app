@@ -22,6 +22,7 @@ public interface AssessmentsService {
 
 //    Assessments addFeedback(Assessments assessments, String id);
 
+    List<?> getGradeInstructor();
 
 
 

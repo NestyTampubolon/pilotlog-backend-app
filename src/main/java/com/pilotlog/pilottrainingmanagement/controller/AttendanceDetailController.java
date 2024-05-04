@@ -7,6 +7,7 @@ import com.pilotlog.pilottrainingmanagement.model.Room;
 import com.pilotlog.pilottrainingmanagement.model.Statements;
 import com.pilotlog.pilottrainingmanagement.service.AttendanceDetailService;
 import com.pilotlog.pilottrainingmanagement.service.AttendanceService;
+import com.pilotlog.pilottrainingmanagement.service.impl.CompanyServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +25,16 @@ import java.util.NoSuchElementException;
 public class AttendanceDetailController {
 
     private final AttendanceDetailService attendanceDetailService;
+
 //    @PostMapping("trainee/enrollattendance")
 //    public ResponseEntity<AttendanceDetail> enrollAttendance(@RequestBody AttendanceDetail attendancedetail) throws ParseException {
 //        return new ResponseEntity<>(attendanceDetailService.enrollAttendance(attendancedetail), HttpStatus.CREATED);
 //    }
 
     @PostMapping("trainee/enrollattendance")
-    public ResponseEntity<?> enrollAttendance(@RequestBody AttendanceDetail attendanceDetail) throws ParseException {
+    public ResponseEntity<?> enrollAttendance(@RequestBody Attendance attendances) throws ParseException {
         try {
-            Map<String, String> response = attendanceDetailService.enrollAttendance(attendanceDetail);
+            Map<String, String> response = attendanceDetailService.enrollAttendance(attendances);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -53,10 +55,21 @@ public class AttendanceDetailController {
         return new ResponseEntity<AttendanceDetail>(attendanceDetailService.getAttendanceDetailById(idattendancedetail), HttpStatus.OK);
     }
 
-    @GetMapping("cpts/allattendance/{id}")
-    public List<AttendanceDetail> getAttendanceValidToByTrainingClass(@PathVariable("id") String idattendance){
-        return attendanceDetailService.getAttendanceValidToByTrainingClass(idattendance);
+    @GetMapping("public/allattendance/{id}")
+    public List<AttendanceDetail> getAttendanceValidToByTrainingClass(@PathVariable("id") String id){
+        return attendanceDetailService.getAttendanceValidToByTrainingClass(id);
     }
+
+    @GetMapping("public/validation/{id}")
+    public ResponseEntity<?> getAttendanceValidTo(@PathVariable("id") String id){
+        return attendanceDetailService.getValidationPilot(id);
+    }
+
+    @GetMapping("public/validationallpilot")
+    public ResponseEntity<?> getValidationAllPilot(){
+        return attendanceDetailService.getValidationAllPilot();
+    }
+
 
     @PutMapping("instructor/addgrade/{id}")
     public ResponseEntity<?>  addGradeAttendanceDetailById(@PathVariable("id") Long id,
@@ -109,5 +122,7 @@ public class AttendanceDetailController {
     public List<AttendanceDetail> getAttendanceDetailByIdTrainee(@PathVariable("id") String id_users){
         return attendanceDetailService.findAttendanceDetailsByTraineeId(id_users);
     }
+
+
 
 }

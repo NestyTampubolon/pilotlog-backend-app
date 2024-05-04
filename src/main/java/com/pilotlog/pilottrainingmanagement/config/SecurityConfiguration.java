@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/api/v1/images/**").permitAll()
                         .requestMatchers("/api/v1/admin").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers("/api/v1/superadmin").hasAnyAuthority(Role.SUPERADMIN.name())
                         .requestMatchers("/api/v1/trainee").hasAnyAuthority(Role.TRAINEE.name(), Role.TRAINEE_CPTS.name(), Role.TRAINEE_INSTRUCTOR.name(), Role.ADMIN.name())
                         .requestMatchers("/api/v1/instructor").hasAnyAuthority(Role.INSTRUCTOR.name(), Role.TRAINEE_INSTRUCTOR.name())
                         .requestMatchers("/api/v1/cpts").hasAnyAuthority(Role.CPTS.name())

@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Map;
 
 public interface UsersService {
     Users addUser(Users users);
@@ -23,4 +25,5 @@ public interface UsersService {
     Users changePassword(Users users, String id);
     Users updatePhotoProfile(MultipartFile profle, String id);
     ResponseEntity<byte[]> loadProfile(String filename) throws MalformedURLException;
+    Map<String, BigInteger> findAllPilotsCountsByCompanyId();
 }

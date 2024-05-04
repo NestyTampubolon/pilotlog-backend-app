@@ -15,11 +15,11 @@ public interface AttendanceRepository extends JpaRepository<Attendance, String> 
     @Query(value= "SELECT ad.* FROM attendance ad JOIN trainingclass tc ON ad.id_trainingclass = tc.id_trainingclass  AND ad.is_delete = 0 AND ad.date = :date AND tc.id_company = :idCompany ", nativeQuery = true)
     List<Attendance> findAllByIdCompanyAndDate(String idCompany, Date date);
     Attendance findByKeyAttendance(String keyAttendance);
-    @Query(value= "SELECT ad.* FROM attendance ad WHERE ad.id_instructor = :idInstructor AND ad.is_delete = 0 AND ad.status = 'Pending' ORDER BY ad.start_time ASC", nativeQuery = true)
-    List<Attendance> getAttendancePendingByIdInstructor(String idInstructor);
-    @Query(value= "SELECT ad.* FROM attendance ad WHERE ad.id_instructor = :idInstructor AND ad.is_delete = 0 AND (ad.status = 'Confirmation' OR ad.status = 'Done') ORDER BY ad.start_time ASC", nativeQuery = true)
-    List<Attendance> getAttendanceConfirmationDoneByIdInstructor(String idInstructor);
-    @Query(value= "SELECT ad.* FROM attendance ad WHERE ad.id_instructor = :idInstructor AND ad.is_delete = 0 AND ad.id_trainingclass = :idTrainingClass ORDER BY ad.start_time DESC", nativeQuery = true)
+    @Query(value= "SELECT ad.* FROM attendance ad JOIN trainingclass tc ON ad.id_trainingclass = tc.id_trainingclass WHERE ad.id_instructor = :idInstructor AND ad.is_delete = 0 AND ad.status = 'Pending' AND tc.id_company = :idCompany ORDER BY ad.date DESC, ad.start_time DESC", nativeQuery = true)
+    List<Attendance> getAttendancePendingByIdInstructor(String idInstructor, String idCompany );
+    @Query(value= "SELECT ad.* FROM attendance ad JOIN trainingclass tc ON ad.id_trainingclass = tc.id_trainingclass WHERE ad.id_instructor = :idInstructor AND ad.is_delete = 0 AND (ad.status = 'Confirmation' OR ad.status = 'Done') AND tc.id_company = :idCompany  ORDER BY ad.date DESC, ad.start_time DESC", nativeQuery = true)
+    List<Attendance> getAttendanceConfirmationDoneByIdInstructor(String idInstructor, String idCompany);
+    @Query(value= "SELECT ad.* FROM attendance ad WHERE ad.id_instructor = :idInstructor AND ad.is_delete = 0 AND ad.id_trainingclass = :idTrainingClass ORDER BY ad.date DESC, ad.start_time DESC", nativeQuery = true)
     List<Attendance> getAttendanceByIdInstructorAndIdTrainingClass(String idInstructor, String idTrainingClass);
 
 }

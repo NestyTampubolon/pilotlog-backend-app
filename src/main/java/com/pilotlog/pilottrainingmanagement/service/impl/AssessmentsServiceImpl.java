@@ -86,6 +86,12 @@ public class AssessmentsServiceImpl  implements AssessmentsService {
         return null;
     }
 
+    @Override
+    public List<?> getGradeInstructor() {
+        System.out.println(assessmentsRepository.getGradeInstructor(AuthenticationServiceImpl.getCompanyInfo().getId_company()));
+        return assessmentsRepository.getGradeInstructor(AuthenticationServiceImpl.getCompanyInfo().getId_company());
+    }
+
 //    @Override
 //    public Assessments addFeedback(Assessments assessments, String id) {
 //        Room existingRoom = roomRepository.findById(id).orElseThrow(

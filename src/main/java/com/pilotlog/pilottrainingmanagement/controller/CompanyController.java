@@ -33,12 +33,12 @@ public class CompanyController {
         return new ResponseEntity<>(companyService.addCompany(company), HttpStatus.CREATED);
     }
 
-    @GetMapping("admin/company")
+    @GetMapping("superadmin/company")
     public List<Company> getAllCompany(){
         return companyService.getAllCompany();
     }
 
-    @GetMapping("admin/company/{id}")
+    @GetMapping("public/company/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable("id") String idcompany){
         return new ResponseEntity<Company>(companyService.getCompanyById(idcompany), HttpStatus.OK);
     }
@@ -50,9 +50,15 @@ public class CompanyController {
 //    }
 
     @PutMapping(value = "admin/company/update/{id}")
-    public ResponseEntity<Company> updateTraining(@PathVariable("id") String id,
+    public ResponseEntity<Company> updateCompany(@PathVariable("id") String id,
                                                   @RequestBody Company company) {
         return new ResponseEntity<>(companyService.updateCompany(company, id), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "superadmin/company/activation/{id}")
+    public ResponseEntity<Company> activationCompany(@PathVariable("id") String id,
+                                                  @RequestBody Company company) {
+        return new ResponseEntity<>(companyService.activationCompany(company, id), HttpStatus.OK);
     }
 
     @PutMapping(value = "admin/company/update/logo/{id}")

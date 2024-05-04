@@ -21,5 +21,4 @@ public interface AttendanceService {
     List<Attendance> getAttendanceConfirmationDoneByIdInstructor();
     Attendance addSignatureInstructor(byte[] signatureData, String id);
     List<Attendance> getAttendanceByIdInstructorAndIdTrainingClass(String id);
-    Attendance updateDoneAttendance(String id);
 }
