@@ -37,7 +37,7 @@ public class Users implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "rank")
+    @Column(name = "pilot_rank")
     @Enumerated(EnumType.STRING)
     private Rank rank;
 
@@ -50,7 +50,7 @@ public class Users implements UserDetails {
     @Column(name = "photo_profile")
     private String photo_profile;
 
-    @Column(name = "role")
+    @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private Role role;
 
