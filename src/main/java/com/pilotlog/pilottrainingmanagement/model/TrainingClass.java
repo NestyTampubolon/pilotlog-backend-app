@@ -33,7 +33,7 @@ public class TrainingClass {
     private String description;
 
     @Column(name = "is_delete", nullable = false)
-    private byte isDelete;
+    private boolean isDelete;
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;

@@ -15,7 +15,7 @@ public interface TrainingClassRepository extends JpaRepository<TrainingClass, St
     List<TrainingClass> findAllByIdCompany(String idCompany);
 
 
-    @Query(value = "SELECT id_trainingclass FROM TrainingClass WHERE id_company = :idCompany ORDER BY created_at DESC LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT id_trainingclass FROM trainingclass WHERE id_company = :idCompany ORDER BY created_at DESC LIMIT 1", nativeQuery = true)
     String findLastIdByIdCompany(@Param("idCompany") String idCompany);
 
     @Query(value = "SELECT * FROM trainingclass WHERE id_trainingclass = :id_trainingclass AND id_company = :idCompany AND is_delete = 0", nativeQuery = true)

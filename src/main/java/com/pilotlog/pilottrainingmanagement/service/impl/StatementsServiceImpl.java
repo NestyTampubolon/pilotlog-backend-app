@@ -23,7 +23,7 @@ public class StatementsServiceImpl implements StatementsService {
         Statements statementsC = new Statements();
         statementsC.setContent(statements.getContent());
         statementsC.setStatementType(statements.getStatementType());
-        statementsC.setIs_delete((byte) 0);
+        statementsC.set_delete(false);
         statementsC.setId_company(AuthenticationServiceImpl.getCompanyInfo());
         statementsC.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
         statementsC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
@@ -68,10 +68,10 @@ public class StatementsServiceImpl implements StatementsService {
                 () -> new ResourceNotFoundException("Statement", "Id", id)
         );
 
-        if(existingStatement.getIs_active() == 0){
-            existingStatement.setIs_active((byte) 1);
-        } else if (existingStatement.getIs_active() == 1) {
-            existingStatement.setIs_active((byte) 0);
+        if(!existingStatement.is_active()){
+            existingStatement.set_active(true);
+        } else {
+            existingStatement.set_active(false);
         }
         existingStatement.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
         existingStatement.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
@@ -86,7 +86,7 @@ public class StatementsServiceImpl implements StatementsService {
                 () -> new ResourceNotFoundException("Statement", "Id", id)
         );
 
-        existingStatement.setIs_delete((byte) 1);
+        existingStatement.set_delete(true);
         statementsRepository.save(existingStatement);
         return existingStatement;
     }

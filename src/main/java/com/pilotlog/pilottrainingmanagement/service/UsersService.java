@@ -26,4 +26,5 @@ public interface UsersService {
     Users updatePhotoProfile(MultipartFile profle, String id);
     ResponseEntity<byte[]> loadProfile(String filename) throws MalformedURLException;
     Map<String, BigInteger> findAllPilotsCountsByCompanyId();
+
 }

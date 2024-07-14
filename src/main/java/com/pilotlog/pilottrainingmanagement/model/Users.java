@@ -58,7 +58,7 @@ public class Users implements UserDetails {
     private String status;
 
     @Column(name = "is_active", nullable = false)
-    private byte is_active;
+    private boolean is_active;
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;
@@ -75,9 +75,6 @@ public class Users implements UserDetails {
     @ManyToOne
     @JoinColumn(name="id_company")
     private Company id_company;
-
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private List<ForgotPassword> forgotPasswords;
 
     public String getPassword() {
         return password;

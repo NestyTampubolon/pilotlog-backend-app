@@ -17,10 +17,10 @@ public class Statements {
     private String content;
 
     @Column(name = "is_active", nullable = false)
-    private byte is_active;
+    private boolean is_active;
 
     @Column(name = "is_delete", nullable = false)
-    private byte is_delete;
+    private boolean is_delete;
 
     @Column(name = "statementType", nullable = false)
     @Enumerated(EnumType.STRING)

@@ -22,6 +22,7 @@ public interface AttendanceDetailService {
     ResponseEntity<?> updateGradeAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id);
 
     ResponseEntity<?> getValidationPilot(String id);
+
     ResponseEntity<?> getValidationAllPilot();
 
     List<AttendanceDetail> findPendingAttendanceDetailsByTraineeId();

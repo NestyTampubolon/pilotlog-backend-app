@@ -22,7 +22,7 @@ public class RoomServiceImpl implements RoomService {
         Room roomC = new Room();
         roomC.setId_room(room.getId_room());
         roomC.setName(room.getName());
-        roomC.setIs_delete((byte) 0);
+        roomC.set_delete(false);
         roomC.setId_company(AuthenticationServiceImpl.getCompanyInfo());
         roomC.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
         roomC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
@@ -61,7 +61,7 @@ public class RoomServiceImpl implements RoomService {
                 () -> new ResourceNotFoundException("Room", "Id", id)
         );
 
-        existingRoom.setIs_delete((byte) 1);
+        existingRoom.set_delete(true);
         roomRepository.save(existingRoom);
         return existingRoom;
     }

@@ -37,7 +37,7 @@ public class TrainingClassImpl implements TrainingClassService {
         trainingC.setShort_name(trainingClass.getShort_name());
         trainingC.setRecurrent(trainingClass.getRecurrent());
         trainingC.setDescription(trainingClass.getDescription());
-        trainingC.setIsDelete((byte) 0);
+        trainingC.setDelete(false);
         trainingC.setId_company(idCompany);
         trainingC.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
         trainingC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
@@ -82,7 +82,7 @@ public class TrainingClassImpl implements TrainingClassService {
                 () -> new ResourceNotFoundException("Training Class", "Id", id)
         );
 
-        existingTraining.setIsDelete((byte) 1);
+        existingTraining.setDelete(true);
         trainingClassRepository.save(existingTraining);
         return existingTraining;
     }
@@ -91,10 +91,6 @@ public class TrainingClassImpl implements TrainingClassService {
     public String getValueDateTrainingClass(String idTrainingClass, Date date) {
         String companyId = AuthenticationServiceImpl.getCompanyInfo().getId_company();
         List<TrainingClass> existingTraining = trainingClassRepository.findByIdTrainingClass(idTrainingClass, companyId);
-        System.out.println("disini");
-        System.out.println(idTrainingClass);
-        System.out.println(companyId);
-        System.out.println(existingTraining);
         if (!existingTraining.isEmpty()) {
             TrainingClass firstTraining = existingTraining.get(0);
 

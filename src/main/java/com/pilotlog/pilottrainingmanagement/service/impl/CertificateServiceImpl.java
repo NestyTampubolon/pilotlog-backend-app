@@ -29,7 +29,6 @@ public class CertificateServiceImpl implements CertificateService {
     @Override
     public Certificate addCertificate(Certificate certificate) {
         Certificate certificateC = new Certificate();
-        certificateC.setNameText(certificate.getNameText());
         certificateC.setNameColor(certificate.getNameColor());
         certificateC.setNameFontSize(certificate.getNameFontSize());
         certificateC.setNamePositionX(certificate.getNamePositionX());
@@ -37,7 +36,6 @@ public class CertificateServiceImpl implements CertificateService {
         certificateC.setNameWidth(certificate.getNameWidth());
         certificateC.setNameHeight(certificate.getNameHeight());
         certificateC.setNameTextAlign(certificate.getNameTextAlign());
-        certificateC.setDateText(certificate.getDateText());
         certificateC.setDateColor(certificate.getDateColor());
         certificateC.setDateFontSize(certificate.getDateFontSize());
         certificateC.setDatePositionX(certificate.getDatePositionX());
@@ -45,7 +43,6 @@ public class CertificateServiceImpl implements CertificateService {
         certificateC.setDateWidth(certificate.getDateWidth());
         certificateC.setDateHeight(certificate.getDateHeight());
         certificateC.setDateTextAlign(certificate.getDateTextAlign());
-        certificateC.setTrainingText(certificate.getTrainingText());
         certificateC.setTrainingColor(certificate.getTrainingColor());
         certificateC.setTrainingFontSize(certificate.getTrainingFontSize());
         certificateC.setTrainingPositionX(certificate.getTrainingPositionX());
@@ -53,7 +50,6 @@ public class CertificateServiceImpl implements CertificateService {
         certificateC.setTrainingWidth(certificate.getTrainingWidth());
         certificateC.setTrainingHeight(certificate.getTrainingHeight());
         certificateC.setTrainingTextAlign(certificate.getTrainingTextAlign());
-        certificateC.setCompanyText(certificate.getCompanyText());
         certificateC.setCompanyColor(certificate.getCompanyColor());
         certificateC.setCompanyFontSize(certificate.getCompanyFontSize());
         certificateC.setCompanyPositionX(certificate.getCompanyPositionX());
@@ -100,7 +96,6 @@ public class CertificateServiceImpl implements CertificateService {
                 () -> new ResourceNotFoundException("Certificate", "Id", id)
         );
 
-        existingCertificate.setNameText(certificate.getNameText());
         existingCertificate.setNameColor(certificate.getNameColor());
         existingCertificate.setNameFontSize(certificate.getNameFontSize());
         existingCertificate.setNamePositionX(certificate.getNamePositionX());
@@ -108,7 +103,6 @@ public class CertificateServiceImpl implements CertificateService {
         existingCertificate.setNameWidth(certificate.getNameWidth());
         existingCertificate.setNameHeight(certificate.getNameHeight());
         existingCertificate.setNameTextAlign(certificate.getNameTextAlign());
-        existingCertificate.setDateText(certificate.getDateText());
         existingCertificate.setDateColor(certificate.getDateColor());
         existingCertificate.setDateFontSize(certificate.getDateFontSize());
         existingCertificate.setDatePositionX(certificate.getDatePositionX());
@@ -116,7 +110,6 @@ public class CertificateServiceImpl implements CertificateService {
         existingCertificate.setDateWidth(certificate.getDateWidth());
         existingCertificate.setDateHeight(certificate.getDateHeight());
         existingCertificate.setDateTextAlign(certificate.getDateTextAlign());
-        existingCertificate.setTrainingText(certificate.getTrainingText());
         existingCertificate.setTrainingColor(certificate.getTrainingColor());
         existingCertificate.setTrainingFontSize(certificate.getTrainingFontSize());
         existingCertificate.setTrainingPositionX(certificate.getTrainingPositionX());
@@ -124,7 +117,6 @@ public class CertificateServiceImpl implements CertificateService {
         existingCertificate.setTrainingWidth(certificate.getTrainingWidth());
         existingCertificate.setTrainingHeight(certificate.getTrainingHeight());
         existingCertificate.setTrainingTextAlign(certificate.getTrainingTextAlign());
-        existingCertificate.setCompanyText(certificate.getCompanyText());
         existingCertificate.setCompanyColor(certificate.getCompanyColor());
         existingCertificate.setCompanyFontSize(certificate.getCompanyFontSize());
         existingCertificate.setCompanyPositionX(certificate.getCompanyPositionX());
@@ -168,6 +160,7 @@ public class CertificateServiceImpl implements CertificateService {
         if (backgroundImage != null && !backgroundImage.isEmpty()) {
             try {
                 String certificateFilename = saveCertificate(backgroundImage);
+                System.out.println(certificateFilename);
                 existingCertificate.setBackgroundImage(certificateFilename);
                 return certificateRepository.save(existingCertificate);
             } catch (IOException e) {

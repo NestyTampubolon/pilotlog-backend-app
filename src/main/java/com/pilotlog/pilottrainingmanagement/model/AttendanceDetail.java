@@ -19,7 +19,6 @@ public class AttendanceDetail {
     @Column(name = "signature", columnDefinition = "BLOB")
     private byte[] signature;
 
-
     @Column(name = "no_certificate")
     private String no_Certificate;
 

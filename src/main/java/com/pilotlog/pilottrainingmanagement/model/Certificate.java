@@ -16,9 +16,6 @@ public class Certificate {
     @Column(name = "backgroundImage")
     private String backgroundImage;
 
-    @Column(name = "nameText")
-    private String nameText;
-
     @Column(name = "nameColor")
     private String nameColor;
 
@@ -39,9 +36,6 @@ public class Certificate {
 
     @Column(name = "nameTextAlign")
     private String nameTextAlign;
-
-    @Column(name = "dateText")
-    private String dateText;
 
     @Column(name = "dateColor")
     private String dateColor;
@@ -64,8 +58,6 @@ public class Certificate {
     @Column(name = "dateTextAlign")
     private String dateTextAlign;
 
-    @Column(name = "trainingText")
-    private String trainingText;
 
     @Column(name = "trainingColor")
     private String trainingColor;
@@ -87,9 +79,6 @@ public class Certificate {
 
     @Column(name = "trainingTextAlign")
     private String trainingTextAlign;
-
-    @Column(name = "companyText")
-    private String companyText;
 
     @Column(name = "companyColor")
     private String companyColor;
