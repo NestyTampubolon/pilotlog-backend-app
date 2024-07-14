@@ -16,17 +16,17 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UsersRepository extends JpaRepository<Users, String> {
 
-    @Query(value= "SELECT * FROM Users  WHERE id_company = :companyId", nativeQuery = true)
+    @Query(value= "SELECT * FROM users  WHERE id_company = :companyId", nativeQuery = true)
     List<Users> findAllByCompanyId(String companyId);
 
-    @Query(value= "SELECT * FROM Users  WHERE id_company = :companyId AND is_active = 1 AND role != 'ADMIN'", nativeQuery = true)
+    @Query(value= "SELECT * FROM users  WHERE id_company = :companyId AND is_active = 1 AND user_role != 'ADMIN'", nativeQuery = true)
     List<Users> findAllPilotByCompanyId(String companyId);
 
     @Query(value = "SELECT " +
             "SUM(CASE WHEN u.status = 'VALID' THEN 1 ELSE 0 END) AS validPilotsCount, " +
             "COUNT(u.id_users) AS allPilotsCount " +
-            "FROM Users u " +
-            "WHERE u.id_company = :companyId AND u.is_active = 1 AND u.role != 'ADMIN'", nativeQuery = true)
+            "FROM users u " +
+            "WHERE u.id_company = :companyId AND u.is_active = 1 AND u.user_role != 'ADMIN'", nativeQuery = true)
     Map<String, BigInteger> findAllPilotsCountsByCompanyId(String companyId);
 
 
@@ -35,7 +35,7 @@ public interface UsersRepository extends JpaRepository<Users, String> {
     Users findByRole(Role role);
 
 
-    @Query(value="SELECT * FROM Users WHERE role IN ('INSTRUCTOR', 'TRAINEE_INSTRUCTOR', 'INSTRUCTOR_CPTS', 'TRAINEE_INSTRUCTOR_CPTS') AND id_company = :companyId", nativeQuery = true)
+    @Query(value="SELECT * FROM users WHERE user_role IN ('INSTRUCTOR', 'TRAINEE_INSTRUCTOR', 'INSTRUCTOR_CPTS', 'TRAINEE_INSTRUCTOR_CPTS') AND id_company = :companyId", nativeQuery = true)
     List<Users> findInstructorUsers(String companyId);
 
     default List<Users> findInstructorUsers() {
@@ -63,7 +63,7 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE Users u SET u.password = ?2 WHERE u.email = ?1")
+    @Query(value="UPDATE users SET password = :password WHERE email = :email", nativeQuery = true)
     void updatePassword(String email, String password );
 
 

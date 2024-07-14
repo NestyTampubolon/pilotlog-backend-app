@@ -1,5 +1,8 @@
 package com.pilotlog.pilottrainingmanagement.model;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
     SUPERADMIN("Superadmin"),
     ADMIN("Admin"),
@@ -17,7 +20,4 @@ public enum Role {
         this.roleName = roleName;
     }
 
-    public String getRoleName() {
-        return roleName;
-    }
 }

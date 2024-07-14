@@ -39,7 +39,8 @@ public class Attendance {
     @JsonFormat(pattern="HH:mm")
     private Time end_time;
 
-    @Column(name = "signature_instructor")
+    @Lob
+    @Column(name = "signature_instructor", columnDefinition = "BLOB")
     private byte[] signature_instructor;
 
     @Column(name = "keyAttendance")
@@ -50,7 +51,7 @@ public class Attendance {
     private Status status;
 
     @Column(name = "is_delete", nullable = false)
-    private byte isDelete;
+    private boolean isDelete;
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;

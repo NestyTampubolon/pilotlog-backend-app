@@ -37,7 +37,7 @@ public class Users implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "rank")
+    @Column(name = "pilot_rank")
     @Enumerated(EnumType.STRING)
     private Rank rank;
 
@@ -50,7 +50,7 @@ public class Users implements UserDetails {
     @Column(name = "photo_profile")
     private String photo_profile;
 
-    @Column(name = "role")
+    @Column(name = "user_role")
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -58,7 +58,7 @@ public class Users implements UserDetails {
     private String status;
 
     @Column(name = "is_active", nullable = false)
-    private byte is_active;
+    private boolean is_active;
 
     @Column(name = "created_at", nullable = false)
     private Timestamp created_at;
@@ -75,9 +75,6 @@ public class Users implements UserDetails {
     @ManyToOne
     @JoinColumn(name="id_company")
     private Company id_company;
-
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    private List<ForgotPassword> forgotPasswords;
 
     public String getPassword() {
         return password;

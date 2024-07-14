@@ -1,11 +1,13 @@
 package com.pilotlog.pilottrainingmanagement.controller;
 
 import com.pilotlog.pilottrainingmanagement.dto.MailBody;
+import com.pilotlog.pilottrainingmanagement.exception.ResourceNotFoundException;
 import com.pilotlog.pilottrainingmanagement.model.ForgotPassword;
 import com.pilotlog.pilottrainingmanagement.model.Users;
 import com.pilotlog.pilottrainingmanagement.repository.ForgotPasswordRepository;
 import com.pilotlog.pilottrainingmanagement.repository.UsersRepository;
 import com.pilotlog.pilottrainingmanagement.service.EmailService;
+import com.pilotlog.pilottrainingmanagement.service.impl.AuthenticationServiceImpl;
 import com.pilotlog.pilottrainingmanagement.utils.ChangePassword;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +18,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
@@ -40,10 +44,19 @@ public class ForgotPasswordController {
         }
 
         int otp = otpGenerator();
+//        MailBody mailBody = MailBody.builder()
+//                .to(email)
+//                .text("This is the OTP for your Forgot Password request : " + otp)
+//                .subject("OTP for Forgot Password request")
+//                .build();
+
+        String htmlContent = "<p>This is the OTP for your Forgot Password request: </p><h1><strong>" + otp + "</strong></h1>";
+
         MailBody mailBody = MailBody.builder()
                 .to(email)
-                .text("This is the OTP for your Forgot Password request : " + otp)
+                .text(htmlContent)
                 .subject("OTP for Forgot Password request")
+                .isHtml(true)
                 .build();
 
         ForgotPassword fp = ForgotPassword.builder()
@@ -86,9 +99,19 @@ public class ForgotPasswordController {
             return new ResponseEntity<>("Please enter the password again!", HttpStatus.EXPECTATION_FAILED);
         }
 
-        System.out.println(changePassword.password());
-        String encodedPassword = new BCryptPasswordEncoder().encode(changePassword.password());
-        usersRepository.updatePassword(email, encodedPassword);
+        Users existingUsers = usersRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("Users", "Id", email)
+        );
+        System.out.println(email);
+        System.out.println(existingUsers);
+
+        existingUsers.setPassword(new BCryptPasswordEncoder().encode(changePassword.password()));
+        existingUsers.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
+        existingUsers.setUpdated_by(existingUsers.getId_users());
+        usersRepository.save(existingUsers);
+//        System.out.println(changePassword.password());
+//        String encodedPassword = new BCryptPasswordEncoder().encode(changePassword.password());
+//        usersRepository.updatePassword(email, encodedPassword);
 
         return ResponseEntity.ok("Password has been changed!");
 

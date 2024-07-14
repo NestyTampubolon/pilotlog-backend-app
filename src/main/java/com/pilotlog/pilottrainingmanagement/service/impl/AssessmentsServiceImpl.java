@@ -61,6 +61,9 @@ public class AssessmentsServiceImpl  implements AssessmentsService {
 
     @Override
     public List<Assessments> getAssessmentByIdAttendenceDetail(Long id) {
+        System.out.println(id);
+        System.out.println(assessmentsRepository.findAllByidAttendanceDetailForInstructor(id));
+        System.out.println("test");
         return assessmentsRepository.findAllByidAttendanceDetailForInstructor(id);
     }
 

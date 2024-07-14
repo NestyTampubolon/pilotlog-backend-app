@@ -34,7 +34,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyC.setEmail(company.getEmail());
         companyC.setLogo(company.getLogo());
         companyC.setContact(company.getContact());
-        companyC.setIs_delete((byte) 0);
+        companyC.set_delete(false);
         companyC.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
         companyC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
         companyC.setCreated_by(AuthenticationServiceImpl.getUserInfo());
@@ -57,8 +57,6 @@ public class CompanyServiceImpl implements CompanyService {
         Company existingCompany = companyRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Company", "Id", id)
         );
-
-        System.out.println(company);
 
         existingCompany.setName(company.getName());
         existingCompany.setEmail(company.getEmail());
@@ -98,10 +96,10 @@ public class CompanyServiceImpl implements CompanyService {
                 () -> new ResourceNotFoundException("Company", "Id", id)
         );
 
-        if(existingCompany.getIs_active() == 0){
-            existingCompany.setIs_active((byte) 1) ;
-        }else if(existingCompany.getIs_active() == 1){
-            existingCompany.setIs_active((byte) 0) ;
+        if(existingCompany.is_active() == false){
+            existingCompany.set_active(true); ;
+        }else if(existingCompany.is_active()){
+            existingCompany.set_active(false); ;
         }
 
         companyRepository.save(existingCompany);

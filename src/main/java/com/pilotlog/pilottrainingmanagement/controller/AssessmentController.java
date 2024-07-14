@@ -25,7 +25,7 @@ public class AssessmentController {
         return new ResponseEntity(assessmentsService.getAssessmentByIdAttendenceDetail(idattendancedetail), HttpStatus.OK);
     }
 
-    @GetMapping("cpts/assessmentforTrainee/{id}")
+    @GetMapping("public/assessmentforTrainee/{id}")
     public ResponseEntity<Assessments> getAssessmentByIdForTrainee(@PathVariable("id") Long idattendancedetail){
         return new ResponseEntity(assessmentsService.getAssessmentByIdAttendenceDetailForTrainee(idattendancedetail), HttpStatus.OK);
     }

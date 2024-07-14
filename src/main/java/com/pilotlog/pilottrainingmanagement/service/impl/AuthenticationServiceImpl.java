@@ -89,8 +89,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             companyC.setEmail(signUpRequest.getCompany().getEmail());
             companyC.setLogo(signUpRequest.getCompany().getLogo());
             companyC.setContact(signUpRequest.getCompany().getContact());
-            companyC.setIs_active((byte) 0);
-            companyC.setIs_delete((byte) 0);
+            companyC.set_active(false);
+            companyC.set_delete(false);
             companyC.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
             companyC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
             companyC.setCreated_by(companyId + signUpRequest.getUsers().getId_no());
@@ -110,7 +110,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             usersc.setPassword(new BCryptPasswordEncoder().encode(signUpRequest.getUsers().getPassword()));
             usersc.setHub(signUpRequest.getUsers().getHub());
             usersc.setRole(Role.ADMIN);
-            usersc.setIs_active((byte) 1);
+            usersc.set_active(true);
             usersc.setId_company(existingCompany);
             usersc.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
             usersc.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
@@ -131,8 +131,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(signinRequest.getEmail(), signinRequest.getPassword());
 
         try {
-            System.out.println(signinRequest.getEmail());
-            System.out.println(signinRequest.getPassword());
             authenticationManager.authenticate(authentication);
         } catch (BadCredentialsException e) {
             System.out.println("Invalid username or password");

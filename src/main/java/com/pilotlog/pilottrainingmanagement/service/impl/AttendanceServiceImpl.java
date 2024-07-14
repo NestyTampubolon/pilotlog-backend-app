@@ -73,7 +73,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             attendanceC.setId_admin(AuthenticationServiceImpl.getUserProfileInfo());
             attendanceC.setStatus(Status.valueOf("Pending"));
             attendanceC.setKeyAttendance(getSaltString());
-            attendanceC.setIsDelete((byte) 0);
+            attendanceC.setDelete(false);
             attendanceC.setId_trainingclass(attendance.getId_trainingclass());
             attendanceC.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
             attendanceC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
@@ -173,7 +173,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         Attendance existingAttandance = attendanceRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Attendance", "Id", id)
         );
-        existingAttandance.setIsDelete((byte) 1);
+        existingAttandance.setDelete(true);
         attendanceRepository.save(existingAttandance);
         return existingAttandance;
     }

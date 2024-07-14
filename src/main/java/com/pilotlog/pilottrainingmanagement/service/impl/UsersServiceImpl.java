@@ -47,7 +47,7 @@ public class UsersServiceImpl implements UsersService {
         usersc.setLicense_no(users.getLicense_no());
         usersc.setPhoto_profile(users.getPhoto_profile());
         usersc.setRole(users.getRole());
-        usersc.setIs_active((byte) 1);
+        usersc.set_active(true);
         if(!"ADMIN".equals(users.getRole())) {
             users.setLicense_no(users.getLicense_no());
             users.setStatus("NOT VALID");
@@ -141,7 +141,11 @@ public class UsersServiceImpl implements UsersService {
         );
         LocalDateTime timestamp = LocalDateTime.now();
 
-        existingUsers.setIs_active((byte) 0);
+        if(!existingUsers.is_active()){
+            existingUsers.set_active(true);
+        } else if (existingUsers.is_active()) {
+            existingUsers.set_active(false);
+        }
         existingUsers.setUpdated_at(Timestamp.valueOf(timestamp));
         existingUsers.setUpdated_by(AuthenticationServiceImpl.getUserInfo());
         usersRepository.save(existingUsers);

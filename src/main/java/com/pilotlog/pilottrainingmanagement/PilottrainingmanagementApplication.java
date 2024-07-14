@@ -9,10 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Timestamp;
-
+@EnableJpaRepositories(basePackages = "com.pilotlog.pilottrainingmanagement.repository")
 @SpringBootApplication
 public class PilottrainingmanagementApplication implements CommandLineRunner {
 
@@ -39,7 +40,7 @@ public class PilottrainingmanagementApplication implements CommandLineRunner {
 			users.setLicense_no(" ");
 			users.setPhoto_profile("");
 			users.setRole(Role.SUPERADMIN);
-			users.setIs_active((byte) 1);
+			users.set_active(true);
 			users.setCreated_at(Timestamp.valueOf("2024-02-05 14:03:44.067"));
 			users.setUpdated_at(Timestamp.valueOf("2024-02-05 14:03:44.067"));
 			users.setCreated_by("sda");

@@ -24,7 +24,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department departmentC = new Department();
         departmentC.setId_department(department.getId_department());
         departmentC.setName(department.getName());
-        departmentC.setIs_delete((byte) 0);
+        departmentC.set_delete(false);
         departmentC.setId_company(AuthenticationServiceImpl.getCompanyInfo());
         departmentC.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
         departmentC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
@@ -68,7 +68,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                 () -> new ResourceNotFoundException("Department", "Id", id)
         );
 
-        existingDepartment.setIs_delete((byte) 1);
+        existingDepartment.set_delete(true);
         departmentRepository.save(existingDepartment);
         return existingDepartment;
     }

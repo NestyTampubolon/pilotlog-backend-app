@@ -21,7 +21,7 @@ public class VenueServiceImpl implements VenueService {
         Venue venueC = new Venue();
         venueC.setId_venue(venue.getId_venue());
         venueC.setName(venue.getName());
-        venueC.setIs_delete((byte) 0);
+        venueC.set_delete(false);
         venueC.setId_company(AuthenticationServiceImpl.getCompanyInfo());
         venueC.setCreated_at(Timestamp.valueOf(LocalDateTime.now()));
         venueC.setUpdated_at(Timestamp.valueOf(LocalDateTime.now()));
@@ -61,7 +61,7 @@ public class VenueServiceImpl implements VenueService {
                 () -> new ResourceNotFoundException("Venue", "Id", id)
         );
 
-        existingVenue.setIs_delete((byte) 1);
+        existingVenue.set_delete(true);
         venueRepository.save(existingVenue);
         return existingVenue;
     }
