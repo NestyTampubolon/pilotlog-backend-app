@@ -56,7 +56,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             Time endTime = new Time(utilEndTime.getTime());
             System.out.println(endTime);
 
-            java.util.Date utilStartTime = sdfTime.parse(String.valueOf(attendance.getEnd_time()));
+            java.util.Date utilStartTime = sdfTime.parse(String.valueOf(attendance.getStart_time()));
             Time startTime = new Time(utilStartTime.getTime());
             System.out.println(startTime);
 
@@ -147,7 +147,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             Time endTime = new Time(utilEndTime.getTime());
             System.out.println(endTime);
 
-            java.util.Date utilStartTime = sdfTime.parse(String.valueOf(attendance.getEnd_time()));
+            java.util.Date utilStartTime = sdfTime.parse(String.valueOf(attendance.getStart_time()));
             Time startTime = new Time(utilStartTime.getTime());
             System.out.println(startTime);
 
