@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface AttendanceDetailRepository extends JpaRepository<AttendanceDetail, String> {
 
+    // Menampilkan seluruh attendancedetail yang memiliki idattendance yang sama
     @Query(value = "SELECT * FROM attendancedetail WHERE id_attendance = :idAttendance AND status != 'Pending'", nativeQuery = true)
     List<AttendanceDetail> findAllByIdAttendance(String idAttendance);
 

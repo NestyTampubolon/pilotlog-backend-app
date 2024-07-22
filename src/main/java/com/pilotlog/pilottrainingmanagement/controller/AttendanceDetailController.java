@@ -101,7 +101,7 @@ public class AttendanceDetailController {
     }
 
     @GetMapping("trainee/attendancedetail/recentclass")
-    public List<AttendanceDetail> getAttendanceDetailByIdAttendance(){
+    public List<AttendanceDetail> getPendingAttendanceDetailsByTraineeId(){
         return attendanceDetailService.findPendingAttendanceDetailsByTraineeId();
     }
 
