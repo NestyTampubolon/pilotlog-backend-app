@@ -76,7 +76,7 @@ public class AttendanceDetailController {
                                                                          @RequestBody AttendanceDetailRequest request){
         return attendanceDetailService.addGradeAttendanceDetailById(request,id);
     }
-it
+
     @PostMapping("trainee/addAssessment/{id}")
     public ResponseEntity<?>  addFeedbackAttendanceDetailById(@PathVariable("id") Long id,
                                                            @RequestBody AttendanceDetailRequest request){
