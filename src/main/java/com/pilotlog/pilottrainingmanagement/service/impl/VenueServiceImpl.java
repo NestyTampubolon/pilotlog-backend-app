@@ -16,6 +16,7 @@ import java.util.List;
 public class VenueServiceImpl implements VenueService {
     private final VenueRepository venueRepository;
 
+    // menambah data venue
     @Override
     public Venue addVenue(Venue venue) {
         Venue venueC = new Venue();
@@ -30,16 +31,19 @@ public class VenueServiceImpl implements VenueService {
         return venueRepository.save(venueC);
     }
 
+    // mendapatkan semua data venue
     @Override
     public List<Venue> getAllVenue() {
         return venueRepository.findAllByCompanyIdAndIsDeleteIsZero(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mendapatkan data bvenue berdasarkan id
     @Override
     public Venue getVenueById(String id) {
         return venueRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Venue", "Id", id));
     }
 
+    // mengubah data venue
     @Override
     public Venue updateVenue(Venue venue, String id) {
         Venue existingVenue = venueRepository.findById(id).orElseThrow(
@@ -54,6 +58,7 @@ public class VenueServiceImpl implements VenueService {
         return existingVenue;
     }
 
+    // menghapus data venue
     @Override
     public Venue deleteVenue(Venue venue, String id) {
 

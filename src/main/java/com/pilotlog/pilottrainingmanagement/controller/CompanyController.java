@@ -28,16 +28,19 @@ import java.nio.file.Paths;
 public class CompanyController {
     private final CompanyService companyService;
 
+    // menambah data company
     @PostMapping("admin/addCompany")
     public ResponseEntity<Company> addCompany(@RequestBody Company company){
         return new ResponseEntity<>(companyService.addCompany(company), HttpStatus.CREATED);
     }
 
+    // melihat data company yang dilakukan oleh superadmin
     @GetMapping("superadmin/company")
     public List<Company> getAllCompany(){
         return companyService.getAllCompany();
     }
 
+    // mendapatkan data company berdasarkan id
     @GetMapping("public/company/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable("id") String idcompany){
         return new ResponseEntity<Company>(companyService.getCompanyById(idcompany), HttpStatus.OK);
@@ -49,18 +52,21 @@ public class CompanyController {
 //        return new ResponseEntity<Company>(companyService.updateCompany(company,id), HttpStatus.OK);
 //    }
 
+    // mengubah data company oleh admin
     @PutMapping(value = "admin/company/update/{id}")
     public ResponseEntity<Company> updateCompany(@PathVariable("id") String id,
                                                   @RequestBody Company company) {
         return new ResponseEntity<>(companyService.updateCompany(company, id), HttpStatus.OK);
     }
 
+    // melakukan aktivasi company yang dilakukan oleh superadmin
     @PutMapping(value = "superadmin/company/activation/{id}")
     public ResponseEntity<Company> activationCompany(@PathVariable("id") String id,
                                                   @RequestBody Company company) {
         return new ResponseEntity<>(companyService.activationCompany(company, id), HttpStatus.OK);
     }
 
+    // mengubah data logo company yang dilakukan admin
     @PutMapping(value = "admin/company/update/logo/{id}")
     public ResponseEntity<Company> updateLogo(@PathVariable("id") String id,
                                                   @RequestBody MultipartFile logo) {
@@ -70,6 +76,7 @@ public class CompanyController {
     @Value("${logo.directory}")
     private String logoDirectory;
 
+    // mendapatkan gambar company
     @GetMapping("images/{imageName}")
     public ResponseEntity<Resource> getImageLogo(@PathVariable String imageName) throws MalformedURLException {
         Path imagePath = Paths.get(logoDirectory).resolve(imageName);

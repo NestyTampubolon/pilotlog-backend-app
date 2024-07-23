@@ -24,28 +24,32 @@ import java.util.Map;
 public class TrainingController {
     private final TrainingClassService trainingClassService;
 
-    // build create Users
+    // menambah data training
     @PostMapping("admin/addTraining")
     public ResponseEntity<TrainingClass> addTrainingClass(@RequestBody TrainingClass trainingClass){
         return new ResponseEntity<>(trainingClassService.addTraining(trainingClass), HttpStatus.CREATED);
     }
 
+    // mendapatkan semua data training
     @GetMapping("public/training")
     public List<TrainingClass> getAllTrainingClass(){
         return trainingClassService.getAllTrainingClass();
     }
 
+    // mendapatkan data training berdasarkan id
     @GetMapping("admin/training/{id}")
     public ResponseEntity<TrainingClass> getTrainingById(@PathVariable("id") String idtraining){
         return new ResponseEntity<TrainingClass>(trainingClassService.getTrainingClassById(idtraining), HttpStatus.OK);
     }
 
+    // mengubah data training berdasarkan id
     @PutMapping("admin/training/update/{id}")
     public ResponseEntity<TrainingClass> updateTraining(@PathVariable("id") String id,
                                              @RequestBody TrainingClass trainingClass){
         return new ResponseEntity<TrainingClass>(trainingClassService.updateTrainingClass(trainingClass,id), HttpStatus.OK);
     }
 
+    // menghapus data training berdasarkan id
     @PutMapping("admin/training/delete/{id}")
     public ResponseEntity<TrainingClass> deleteTraining(@PathVariable("id") String id,
                                                         @RequestBody TrainingClass trainingClass){
@@ -53,6 +57,7 @@ public class TrainingController {
     }
 
 
+    // mendapatkan semua data trainee yang dapat diakses oleh trainee
     @GetMapping("trainee/getAllTraining")
     public List<TrainingClass> getAllTrainingClassByIdCompany(){
         return trainingClassService.getAllTrainingClassByIdCompany();

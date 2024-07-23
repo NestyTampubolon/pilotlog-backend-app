@@ -37,6 +37,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Autowired
     private final TrainingClassService trainingClassService;
 
+    // menambah data attendance
     @Override
     public Attendance addAttendance(Attendance attendance) throws ParseException {
         Attendance attendanceC = new Attendance();
@@ -84,16 +85,19 @@ public class AttendanceServiceImpl implements AttendanceService {
         return null;
     }
 
+    // mendapatkan data semua attendance
     @Override
     public List<Attendance> getAllAttendance() {
         return attendanceRepository.findAllByIdCompany(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mendapatkan semua attendance yang berstatus done
     @Override
     public List<Attendance> getAllAttendanceDone(String idTrainingClass) {
         return attendanceRepository.findAllDoneByIdCompany(AuthenticationServiceImpl.getCompanyInfo().getId_company(), idTrainingClass);
     }
 
+    // mendapatkan semua attendance berdasarkan tanggal
     @Override
     public List<Attendance> getAllAttendanceByDate(Attendance attendance) throws ParseException {
         try {
@@ -115,6 +119,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
 
+    // mendapatkan data attendance berdasarkan id
     @Override
     public Attendance getAttendanceById(String id) {
         return attendanceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Attendance", "Id", id));
@@ -132,6 +137,8 @@ public class AttendanceServiceImpl implements AttendanceService {
         return saltStr;
 
     }
+
+    // melakukan udpate attendance
     @Override
     public Attendance updateAttendance(Attendance attendance, String id) throws ParseException {
         Attendance existingAttendance = attendanceRepository.findById(id).orElseThrow(
@@ -168,6 +175,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         return existingAttendance;
     }
 
+    // menghapus data attendance
     @Override
     public Attendance deleteAttendance(Attendance attendance, String id) {
         Attendance existingAttandance = attendanceRepository.findById(id).orElseThrow(
@@ -178,6 +186,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         return existingAttandance;
     }
 
+    // melalukan confirmation attendance yang dilakukan oleh instructor
     @Override
     public Attendance confirmationAttendancebyInstructor(Attendance attendance, String id) {
         Attendance existingAttandance = attendanceRepository.findById(id).orElseThrow(
@@ -189,6 +198,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         return existingAttandance;
     }
 
+    // melakukan confirmasi attendance yang dilakukan oleh instructor
     @Override
     public Attendance confirmationAttendancebyAdmin(Attendance attendance, String id) {
         Attendance existingAttendance = attendanceRepository.findById(id).orElseThrow(
@@ -207,16 +217,19 @@ public class AttendanceServiceImpl implements AttendanceService {
         return existingAttendance;
     }
 
+    // mendapatkan data attendance yang bersatatus "pending" oleh instructor
     @Override
     public List<Attendance> getAttendancePendingByIdInstructor() {
         return attendanceRepository.getAttendancePendingByIdInstructor(AuthenticationServiceImpl.getUserInfo(), AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mendapatkan data attendance berdasarkan status "confirmation" dan "done" oleh instructor
     @Override
     public List<Attendance> getAttendanceConfirmationDoneByIdInstructor() {
         return attendanceRepository.getAttendanceConfirmationDoneByIdInstructor(AuthenticationServiceImpl.getUserInfo(), AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // menambah data signature oleh instructor
     @Override
     public Attendance addSignatureInstructor(byte[] signatureData, String id) {
         Attendance existingAttendance = attendanceRepository.findById(String.valueOf(id)).orElseThrow(
@@ -231,6 +244,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         return existingAttendance;
     }
 
+    // mendapatkan data attendance berdasarkan id instructor dan id training class
     @Override
     public List<Attendance> getAttendanceByIdInstructorAndIdTrainingClass( String id) {
         return attendanceRepository.getAttendanceByIdInstructorAndIdTrainingClass(AuthenticationServiceImpl.getUserInfo(), id);

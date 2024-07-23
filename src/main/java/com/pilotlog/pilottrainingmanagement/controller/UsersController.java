@@ -27,47 +27,50 @@ import org.springframework.core.io.Resource;
 public class UsersController {
     private final UsersService usersService;
 
-    // build create Users
+    // menambah data user
     @PostMapping("admin/addUsers")
     public ResponseEntity<Users> addUsers(@RequestBody Users users){
         return new ResponseEntity<>(usersService.addUser(users), HttpStatus.CREATED);
     }
 
-    // get all users
+    // mendapatkan data semua user yang dilakukan oleh admin
     @GetMapping("admin/users")
     public List<Users> getAllUsers(){
         return usersService.getAllUsers();
     }
 
+    // mendapatkan data instructor yang dilakukan oleh admin
     @GetMapping("admin/instructor")
     public List<Users> getAllInstructor(){
         return usersService.getAllInstructor();
     }
 
+    // mendapatkan data users yang dilakukan oleh cpts
     @GetMapping("cpts/users")
     public List<Users> getAllPilot(){
         return usersService.getAllPilot();
     }
 
+    // mendapatkan data semua cpts yang dilakukan oleh admin
     @GetMapping("admin/cpts")
     public List<Users> getAllCPTS(){
         return usersService.getAllCPTS();
     }
 
-    //build get employee by id
+    //mendaptakan data user berdasarkan id users
     @GetMapping("public/users/{id}")
     public ResponseEntity<Users> getUsersById(@PathVariable("id") String idusers){
         return new ResponseEntity<Users>(usersService.getUsersById(idusers), HttpStatus.OK);
     }
 
-    //build update Users
+    //mendapatkan data user yang diakses oleh admin
     @PutMapping("admin/users/{id}")
     public ResponseEntity<Users> updateUsers(@PathVariable("id") String id,
                                              @RequestBody Users users){
         return new ResponseEntity<Users>(usersService.editUsers(users,id), HttpStatus.OK);
     }
 
-    //build delete Users
+    //menghapus data users
     @DeleteMapping("admin/users/{id}")
     public ResponseEntity<String> deleteUsers(@PathVariable("id") String id){
         usersService.deleteUsers(id);
@@ -75,6 +78,7 @@ public class UsersController {
 
     }
 
+    // melakukan aktivasi user yang dilakukan oleh admin
     @PutMapping("admin/activationusers/{id}")
     public ResponseEntity<Users> activationUsers(@PathVariable("id") String id,
                                              @RequestBody Users users){
@@ -89,11 +93,13 @@ public class UsersController {
 //        return ResponseEntity.ok(userId);
 //    }
 
+    // melakukan perubahan password
     @PutMapping("public/changepassword/{id}")
     public ResponseEntity<Users> changePassword(@PathVariable("id") String id, @RequestBody Users users){
         return new ResponseEntity<Users>(usersService.changePassword(users, id), HttpStatus.OK);
     }
 
+    // mengubah data foto profile
     @PutMapping(value = "public/users/update/profile/{id}")
     public ResponseEntity<Users> updateProfile(@PathVariable("id") String id,
                                               @RequestBody MultipartFile profile) {
@@ -103,6 +109,7 @@ public class UsersController {
     @Value("${profile.directory}")
     private String profileDirectory;
 
+    // mendapatkan gambar profile
     @GetMapping("images/profile/{imageName}")
     public ResponseEntity<Resource> getImageProfile(@PathVariable String imageName) throws MalformedURLException {
         Path imagePath = Paths.get(profileDirectory).resolve(imageName);
@@ -113,6 +120,7 @@ public class UsersController {
                 .body(imageResource);
     }
 
+    // mendapatkan jumlah user cpts
     @GetMapping("cpts/countpilot")
     public ResponseEntity<Map<String, BigInteger>> findAllPilotsCountsByCompanyId(){
         Map<String, BigInteger> pilotsCounts = usersService.findAllPilotsCountsByCompanyId();

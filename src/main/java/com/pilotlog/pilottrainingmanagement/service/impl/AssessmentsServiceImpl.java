@@ -25,6 +25,8 @@ public class AssessmentsServiceImpl  implements AssessmentsService {
     private final AttendanceDetailRepository attendanceDetailRepository;
     private final StatementsRepository statementsRepository;
 
+
+    // menambah data grade pada attendance detail yang dilakukan oleh trainee
     @Override
     public ResponseEntity<?> addGradeAttendanceDetailById(Map<String, Integer> ratings, Long id) {
         try {
@@ -59,6 +61,7 @@ public class AssessmentsServiceImpl  implements AssessmentsService {
     }
 
 
+    // mendapatkan data assesment berdasarkan attendance detail
     @Override
     public List<Assessments> getAssessmentByIdAttendenceDetail(Long id) {
         System.out.println(id);
@@ -67,28 +70,33 @@ public class AssessmentsServiceImpl  implements AssessmentsService {
         return assessmentsRepository.findAllByidAttendanceDetailForInstructor(id);
     }
 
+    //
     @Override
     public List<Assessments> getAssessmentByIdAttendenceDetailForTrainee(Long id) {
         return assessmentsRepository.findAllByidAttendanceDetailForTrainee(id);
     }
 
+    // get data assessment berdasarkan attendance yang bisa diakses oleh cpts
     @Override
     public List<Assessments> findAllByidAttendanceForInstructor(String id) {
         return assessmentsRepository.findAllByidAttendanceForInstructor(id);
     }
 
 
+    // melakukan cek data assessment berdasarlam attendance detail
     @Override
     public boolean existsAssessmentsByIdAttendanceDetail(String id) {
         int count = assessmentsRepository.countAssessmentsForInstructorByAttendanceDetailId(id);
         return count > 0;
     }
 
+    // update data assessment
     @Override
     public Assessments updateAssessments(Assessments assessments, String id) {
         return null;
     }
 
+    // mendapatkan data grade instructor
     @Override
     public List<?> getGradeInstructor() {
         System.out.println(assessmentsRepository.getGradeInstructor(AuthenticationServiceImpl.getCompanyInfo().getId_company()));
