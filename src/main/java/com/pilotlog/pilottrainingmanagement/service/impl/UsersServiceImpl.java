@@ -33,6 +33,8 @@ import org.springframework.http.ResponseEntity;
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
+
+    // menambah data users
     @Override
     public Users addUser(Users users){
 
@@ -60,26 +62,31 @@ public class UsersServiceImpl implements UsersService {
         return usersRepository.save(usersc);
     }
 
+    // mendapatkan semua data users
     @Override
     public List<Users> getAllUsers(){
         return usersRepository.findAllByCompanyId(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mendapatkan semua data instructor
     @Override
     public List<Users> getAllInstructor() {
         return usersRepository.findInstructorUsers(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mendapatkan semua data CPTS
     @Override
     public List<Users> getAllCPTS() {
         return usersRepository.findCPTSUsers();
     }
 
+    // mendapatakn semua data pilot
     @Override
     public List<Users> getAllPilot() {
         return usersRepository.findAllPilotByCompanyId(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mendapatkan data users beradasrkan id
     @Override
     public Users getUsersById(String id){
 //        Optional<Users> users = usersRepository.findById(id);
@@ -87,6 +94,7 @@ public class UsersServiceImpl implements UsersService {
         return  usersRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", "Id", id));
     }
 
+    // mengubah data user
     @Override
     public Users editUsers(Users users, String id){
         Users existingUsers = usersRepository.findById(id).orElseThrow(
@@ -125,7 +133,7 @@ public class UsersServiceImpl implements UsersService {
         return existingUsers;
     }
 
-
+    // menghapus data user
     @Override
     public void deleteUsers(String id) {
         // check whetther a users exist in a DB
@@ -134,6 +142,7 @@ public class UsersServiceImpl implements UsersService {
         usersRepository.deleteById(id);
     }
 
+    // melakukan aktivasi user
     @Override
     public Users activationUsers(Users users, String id) {
         Users existingUsers = usersRepository.findById(id).orElseThrow(
@@ -152,6 +161,7 @@ public class UsersServiceImpl implements UsersService {
         return existingUsers;
     }
 
+    // mendapatkan user detail
     @Override
     public UserDetailsService userDetailsService(){
         return new UserDetailsService() {
@@ -163,6 +173,7 @@ public class UsersServiceImpl implements UsersService {
         };
     }
 
+    // mengubah password
     @Override
     public Users changePassword(Users users, String id) {
             Users existingUsers = usersRepository.findById(id).orElseThrow(
@@ -179,6 +190,7 @@ public class UsersServiceImpl implements UsersService {
     @Value("${profile.directory}")
     private String profileDirectory;
 
+    // melakukan update photo profile
     @Override
     public Users updatePhotoProfile(MultipartFile profile, String id) {
         Users existingUsers = usersRepository.findById(id)
@@ -200,6 +212,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
 
+    // menyimpan profile
     private String saveProfile(MultipartFile file) throws IOException {
         // Generate unique filename
         String filename = UUID.randomUUID().toString() + ".png";

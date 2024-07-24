@@ -33,7 +33,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
     private final CompanyService companyService;
     private final TrainingClassRepository trainingClassRepository;
 
-
+    // enroll attendance yang dilakukan oleh trainee
     @Override
     public Map<String, String> enrollAttendance(Attendance attendances) throws ParseException {
         Map<String, String> response = new HashMap<>();
@@ -74,6 +74,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
         return response;
     }
 
+    // menambahkan signature yang dilakuken oleh trainee
     @Override
     public AttendanceDetail addSignature(byte[] signatureData, Long id) {
         AttendanceDetail existingAttendanceDetail = attendanceDetailRepository.findById(String.valueOf(id)).orElseThrow(
@@ -88,16 +89,19 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
         return existingAttendanceDetail;
     }
 
+    // mendapatkan semua attendance detail berdasarkan attendance
     @Override
     public List<AttendanceDetail> getAllAttendanceDetailByIdAttendance(String idAttendance) {
         return attendanceDetailRepository.findAllByIdAttendance(idAttendance);
     }
 
+    // mendapatkan attendance detail berdasarkan id
     @Override
     public AttendanceDetail getAttendanceDetailById(Long id) {
         return attendanceDetailRepository.findById(String.valueOf(id)).orElseThrow(() -> new ResourceNotFoundException("Attendance", "Id", id));
     }
 
+    // menambah grade attendance detail berdasarkan id
     @Override
     public ResponseEntity<?> addGradeAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id) {
         try {
@@ -145,6 +149,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
         }
     }
 
+    // menambah feedback berdasarkan attedance detail
     @Override
     public ResponseEntity<?> addFeedbackAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id) {
         try {
@@ -187,6 +192,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
     }
 
 
+    // mengubah data grade yang dilakukan oleh instructor
     @Override
     public ResponseEntity<?> updateGradeAttendanceDetailById(AttendanceDetailRequest attendanceDetail, Long id) {
         try {
@@ -229,6 +235,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
         }
     }
 
+    // melakukan cek status attendance
     @Override
     public Map<String, String> checkStatusAttendance(String id) {
         Map<String, String> response = null;
@@ -257,11 +264,13 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
         }
     }
 
+    // mendapatkan attendance detail berdasarkan id trainee
     @Override
     public List<AttendanceDetail> findAttendanceDetailsByTraineeId(String id) {
         return attendanceDetailRepository.findAttendanceDetailsByTraineeId(id);
     }
 
+    // mendapatkan data attendance valid to berdasarkan training class
     @Override
     public List<AttendanceDetail> getAttendanceValidToByTrainingClass(String id) {
         return attendanceDetailRepository.findAttendanceValidToByTrainingClass(id);
@@ -269,6 +278,8 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
 
     LocalDate currentDate = LocalDate.now();
 
+
+    // mendapatkan validasi pilot
     @Override
     public ResponseEntity<?> getValidationPilot(String id) {
         Users existingUsers = usersRepository.findById(id).orElseThrow(
@@ -337,6 +348,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
         return ResponseEntity.ok().build();
     }
 
+    // mendapatkan validasi semua pilot
     @Override
     public ResponseEntity<?> getValidationAllPilot(){
 
@@ -351,6 +363,7 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
     }
 
 
+    // mendpaatkan data attendance detail berdasrkan status pending
     @Override
     public List<AttendanceDetail> findPendingAttendanceDetailsByTraineeId() {
         Users traineeId = AuthenticationServiceImpl.getUserProfileInfo();
@@ -363,6 +376,8 @@ public class AttendanceDetailServiceImpl implements AttendanceDetailService {
 //        return attendanceDetailRepository.findAttendanceDetailsByTraineeIdAndIdTrainingClass(traineeId.getId_users(), idTrainingClass);
 //    }
 
+
+    // mendapatkan attendance detaol berdasarkan id trainee dan id training class
     @Override
     public List<AttendanceDetail> getAttendanceDetailByIdTraineeAndIdTrainingClass(String idTrainee, String idtrainingclass) {
         return attendanceDetailRepository.findAttendanceDetailsByTraineeIdAndIdTrainingClass(idTrainee, idtrainingclass);

@@ -18,6 +18,7 @@ import java.util.List;
 public class StatementsServiceImpl implements StatementsService {
     private final StatementsRepository statementsRepository;
 
+    // menambah data statement
     @Override
     public Statements addStatements(Statements statements) {
         Statements statementsC = new Statements();
@@ -32,21 +33,25 @@ public class StatementsServiceImpl implements StatementsService {
         return statementsRepository.save(statementsC);
     }
 
+    // mendapatkan data semua statement
     @Override
     public List<Statements> getAllStatments() {
         return statementsRepository.findAllByCompanyIdAndIsDeleteIsZero(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mendapatkan data semua statemnt yang dilakukan oleh instructor
     @Override
     public List<Statements> getAllStatmentsForTrainee() {
         return statementsRepository.findAllStatementsForTrainee(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mendapatkan semua data statement yang dilakukan oleh trainee
     @Override
     public List<Statements> getAllStatmentsForInstructor() {
         return statementsRepository.findAllStatementsForInstructor(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mengubah data statement
     @Override
     public Statements updateStatements(Statements statements, Long id) {
         Statements existingStatement = statementsRepository.findById(String.valueOf(id)).orElseThrow(
@@ -62,6 +67,7 @@ public class StatementsServiceImpl implements StatementsService {
         return existingStatement;
     }
 
+    // melakukan aktivasi statement
     @Override
     public Statements activationStatements(Statements statements, Long id) {
         Statements existingStatement = statementsRepository.findById(String.valueOf(id)).orElseThrow(
@@ -80,6 +86,7 @@ public class StatementsServiceImpl implements StatementsService {
         return existingStatement;
     }
 
+    // menghapus data statement
     @Override
     public Statements deleteStatement(Statements statements, Long id) {
         Statements existingStatement = statementsRepository.findById(String.valueOf(id)).orElseThrow(

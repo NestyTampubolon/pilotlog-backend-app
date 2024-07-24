@@ -25,34 +25,40 @@ import java.util.List;
 public class CertificateController {
     private final CertificateService certificateService;
 
+    // menambah data certificate untuk setiap company yang dilakukan oleh admin
     @PostMapping("admin/addCertificate")
     public ResponseEntity<Certificate> addCertificate(@RequestBody Certificate certificate){
         return new ResponseEntity<>(certificateService.addCertificate(certificate), HttpStatus.CREATED);
     }
 
+    // mendapatkan data certificate untuk setiap company
     @GetMapping("public/certificate")
     public ResponseEntity<Certificate> getCertificateById(){
         return new ResponseEntity<Certificate>(certificateService.getCertificateById(), HttpStatus.OK);
     }
 
+    // melakukan perubahan data certificate yang dilakukan oleh admin
     @PutMapping("admin/certificate/update/{id}")
     public ResponseEntity<Certificate> updateCertificate(@PathVariable("id") String id,
                                            @RequestBody Certificate certificate){
         return new ResponseEntity<Certificate>(certificateService.updateCertificate(certificate,id), HttpStatus.OK);
     }
 
+    // upload gambar background pada certificate
     @PutMapping(value = "admin/certificate/update/background/{id}")
     public ResponseEntity<Certificate> updateBackgroundImage(@PathVariable("id") String id,
                                                @RequestBody MultipartFile backgroundImage) {
         return new ResponseEntity<>(certificateService.updateBackgroundCertificate(backgroundImage, id), HttpStatus.OK);
     }
 
+    // upload gambar tanda tangan cpts pada certificate
     @PutMapping(value = "admin/certificate/update/signature/{id}")
     public ResponseEntity<Certificate> updateSignature(@PathVariable("id") String id,
                                                      @RequestBody MultipartFile signature) {
         return new ResponseEntity<>(certificateService.updateSignatureCertificate(signature, id), HttpStatus.OK);
     }
 
+    // validasi certificate untuk company apakah sudah ada atau belum
     @GetMapping("public/check/companycertificate")
     public boolean checkCertificateByCompany() {
         return certificateService.existsByCompany();
@@ -62,6 +68,7 @@ public class CertificateController {
     @Value("${certificate.directory}")
     private String certificateDirectory;
 
+    // mendapatkan data gambar certificate
     @GetMapping("images/background/{imageName}")
     public ResponseEntity<Resource> getImageCertificate(@PathVariable String imageName) throws MalformedURLException {
         Path imagePath = Paths.get(certificateDirectory).resolve(imageName);
@@ -75,6 +82,7 @@ public class CertificateController {
     @Value("${cptssignature.directory}")
     private String cptssignatureDirectory;
 
+    // mendapatkan data signature cpts
     @GetMapping("images/cptssignature/{imageName}")
     public ResponseEntity<Resource> getCPTSSignature(@PathVariable String imageName) throws MalformedURLException {
         Path imagePath = Paths.get(cptssignatureDirectory).resolve(imageName);

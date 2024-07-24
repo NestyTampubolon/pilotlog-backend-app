@@ -20,6 +20,7 @@ import java.util.*;
 public class TrainingClassImpl implements TrainingClassService {
     private final TrainingClassRepository trainingClassRepository;
 
+    // menambah data training
     @Override
     public TrainingClass addTraining(TrainingClass trainingClass) {
         Company idCompany = AuthenticationServiceImpl.getCompanyInfo();
@@ -47,16 +48,19 @@ public class TrainingClassImpl implements TrainingClassService {
         return trainingClassRepository.save(trainingC);
     }
 
+    // mendapatkan semua data training class
     @Override
     public List<TrainingClass> getAllTrainingClass() {
         return trainingClassRepository.findAllByIdCompany(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mendapatkan data training class berdasarkan id
     @Override
     public TrainingClass getTrainingClassById(String id) {
         return  trainingClassRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Training", "Id", id));
     }
 
+    // mengubah data trining class
     @Override
     public TrainingClass updateTrainingClass(TrainingClass trainingClass, String id) {
 
@@ -75,6 +79,7 @@ public class TrainingClassImpl implements TrainingClassService {
         return existingTraining;
     }
 
+    // menghapus data training class
     @Override
     public TrainingClass deleteTrainingClass(TrainingClass trainingClass, String id) {
 
@@ -87,6 +92,7 @@ public class TrainingClassImpl implements TrainingClassService {
         return existingTraining;
     }
 
+    // mendapatkan data value dat training class
     @Override
     public String getValueDateTrainingClass(String idTrainingClass, Date date) {
         String companyId = AuthenticationServiceImpl.getCompanyInfo().getId_company();
@@ -162,6 +168,7 @@ public class TrainingClassImpl implements TrainingClassService {
         return null;
     }
 
+    // mendapatkan semua data training clas berdasarkan id company
     @Override
     public List<TrainingClass> getAllTrainingClassByIdCompany() {
         String companyId = AuthenticationServiceImpl.getCompanyInfo().getId_company();

@@ -20,27 +20,31 @@ import java.util.Map;
 public class AssessmentController {
     private final AssessmentsService assessmentsService;
 
+    // get data assessment
     @GetMapping("public/assessment/{id}")
     public ResponseEntity<Assessments> getAssessmentById(@PathVariable("id") Long idattendancedetail){
         return new ResponseEntity(assessmentsService.getAssessmentByIdAttendenceDetail(idattendancedetail), HttpStatus.OK);
     }
 
+    // get data assessment for trainee
     @GetMapping("public/assessmentforTrainee/{id}")
     public ResponseEntity<Assessments> getAssessmentByIdForTrainee(@PathVariable("id") Long idattendancedetail){
         return new ResponseEntity(assessmentsService.getAssessmentByIdAttendenceDetailForTrainee(idattendancedetail), HttpStatus.OK);
     }
 
-
+    // get data assessment berdasarkan attendance yang bisa diakses oleh cpts
     @GetMapping("cpts/assessmentbyidattendance/{id}")
     public ResponseEntity<Assessments> getAssessmentByIdAttendance(@PathVariable("id") String idattendance){
         return new ResponseEntity(assessmentsService.findAllByidAttendanceForInstructor(idattendance), HttpStatus.OK);
     }
 
+    // get data trainee untuk check feedback
     @GetMapping("trainee/checkFeedback/{id}")
     public boolean checkFeedback(@PathVariable("id") String id) {
         return assessmentsService.existsAssessmentsByIdAttendanceDetail(id);
     }
 
+    // mendapatkan data grade instructor
     @GetMapping("public/getgradeinstructor")
     public List<?> getGradeInstructor() {
         return assessmentsService.getGradeInstructor();

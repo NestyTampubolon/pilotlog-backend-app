@@ -16,7 +16,7 @@ import java.util.List;
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
 
-
+    // menambah data room
     @Override
     public Room addRoom(Room room) {
         Room roomC = new Room();
@@ -31,16 +31,19 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.save(roomC);
     }
 
+    // mendapatkan data semua room
     @Override
     public List<Room> getAllRoom() {
         return roomRepository.findAllByCompanyIdAndIsDeleteIsZero(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+    // mendapatkan data room berdasarkan id
     @Override
     public Room getRoomById(String id) {
         return roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "Id", id));
     }
 
+    // mengubah data room
     @Override
     public Room updateRoom(Room room, String id) {
         Room existingRoom = roomRepository.findById(id).orElseThrow(
@@ -55,6 +58,7 @@ public class RoomServiceImpl implements RoomService {
         return existingRoom;
     }
 
+    // menghapus data room
     @Override
     public Room deleteRoom(Room room, String id) {
         Room existingRoom = roomRepository.findById(id).orElseThrow(

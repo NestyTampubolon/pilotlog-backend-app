@@ -26,6 +26,8 @@ import java.nio.file.StandardCopyOption;
 public class CertificateServiceImpl implements CertificateService {
     private final CertificateRepository certificateRepository;
     private final UsersRepository usersRepository;
+
+    // menambah data certificate
     @Override
     public Certificate addCertificate(Certificate certificate) {
         Certificate certificateC = new Certificate();
@@ -85,11 +87,14 @@ public class CertificateServiceImpl implements CertificateService {
         return certificateRepository.save(certificateC);
     }
 
+    // mendapatkan data certificate berdasarkan id
     @Override
     public Certificate getCertificateById() {
         return certificateRepository.findCertificateByCompanyId(AuthenticationServiceImpl.getCompanyInfo().getId_company());
     }
 
+
+    // mengubah data certificate
     @Override
     public Certificate updateCertificate(Certificate certificate, String id) {
         Certificate existingCertificate = certificateRepository.findById(id).orElseThrow(
@@ -152,6 +157,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Value("${certificate.directory}")
     private String certificateDirectory;
 
+    // mengubah data gambar background certificate
     @Override
     public Certificate  updateBackgroundCertificate(MultipartFile backgroundImage, String id) {
         Certificate existingCertificate = certificateRepository.findById(id)
@@ -174,6 +180,7 @@ public class CertificateServiceImpl implements CertificateService {
     @Value("${cptssignature.directory}")
     private String cptssignatureDirectory;
 
+    // mengubah data signature cpts oleh certificate
     @Override
     public Certificate updateSignatureCertificate(MultipartFile signature, String id) {
         Certificate existingCertificate = certificateRepository.findById(id)
@@ -192,12 +199,15 @@ public class CertificateServiceImpl implements CertificateService {
         }
     }
 
+    // melihat data certificate
     @Override
     public boolean existsByCompany() {
         int count = certificateRepository.existsByCompanyId(AuthenticationServiceImpl.getCompanyInfo().getId_company());
         return count > 0;
     }
 
+
+    // menyimpan data certificate
     private String saveCertificate(MultipartFile file) throws IOException {
         // Generate unique filename
         String filename = UUID.randomUUID().toString() + ".png";

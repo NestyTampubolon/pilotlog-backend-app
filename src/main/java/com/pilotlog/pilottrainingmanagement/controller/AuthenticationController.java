@@ -22,6 +22,7 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager manager;
 
+    // melakukan registrasi akun
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest users){
         return ResponseEntity.ok(authenticationService.signUp(users));

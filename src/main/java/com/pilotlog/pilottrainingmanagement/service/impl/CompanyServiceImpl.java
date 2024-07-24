@@ -26,6 +26,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
+
+    // menambah data company
     @Override
     public Company addCompany(Company company) {
         Company companyC = new Company();
@@ -42,17 +44,21 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.save(companyC);
     }
 
+
+    // mendapatkan data semua company
     @Override
     public List<Company> getAllCompany(){
         return companyRepository.findAll();
     }
 
 
+    // mendapatkan data company berdasarkan id
     @Override
     public Company getCompanyById(String id) {
         return companyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company", "Id", id));
     }
 
+    // mengubah data company
     public Company updateCompany(Company company, String id) {
         Company existingCompany = companyRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Company", "Id", id)
@@ -73,6 +79,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Value("${logo.directory}")
     private String logoDirectory;
 
+    // mengubah data logo
     @Override
     public Company updateLogo(MultipartFile logo, String id) {
         Company existingCompany = companyRepository.findById(id).orElseThrow(
@@ -90,6 +97,7 @@ public class CompanyServiceImpl implements CompanyService {
         return existingCompany;
     }
 
+    // melakukan aktivasi company yang dilakukan oleh superadmin
     @Override
     public Company activationCompany(Company company, String id) {
         Company existingCompany = companyRepository.findById(id).orElseThrow(
@@ -106,6 +114,7 @@ public class CompanyServiceImpl implements CompanyService {
         return existingCompany;
     }
 
+    // menyimpan data logo
     private String saveLogo(MultipartFile file) throws IOException {
         // Generate unique filename
         String filename = UUID.randomUUID().toString() + ".png";
